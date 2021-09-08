@@ -7,6 +7,7 @@ public class playerMovement : MonoBehaviour
     public CharacterController controller;
 
     public float speed = 12f;
+    public float runMultiplier = 3.0f;
     public float gravity = -9.8f;
     public float jumpHeight = 20f;
 
@@ -34,10 +35,15 @@ public class playerMovement : MonoBehaviour
 
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
+        float cumSpeed = speed; // Cumulative speed lol
+        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+        {
+            cumSpeed = speed * runMultiplier;
+        }
 
         Vector3 move = transform.right * x + transform.forward * z;
 
-        controller.Move(move * speed * Time.deltaTime);
+        controller.Move(move * cumSpeed * Time.deltaTime);
         if (Input.GetButton("Jump") && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
