@@ -1,101 +1,4 @@
 using UnityEngine;
-// public class Intelligence : MonoBehaviour
-// {
-//     public Transform player;
-//     public LayerMask playerMask;
-//     public LayerMask groundMask;
-//     public float moveSpeed = 2f;
-
-//     // Patrolling
-//     public float walkPointRange;
-//     Vector3 walkPoint;
-//     private bool walkPointSet;
-
-//     // Attacking
-//     public float timeBetweenAttacks;
-//     private bool alreadyAttacked;
-
-//     // States
-//     public float sightRange, attackRange;
-//     private bool playerInSightRange, playerInAttackRange;
-
-//     public Animator animator;
-
-//     private void Update()
-//     {
-//         // Check for sight and attack range
-//         playerInSightRange = Vector3.Distance(transform.position, player.position) <= sightRange;
-//         playerInAttackRange = Vector3.Distance(transform.position, player.position) <= attackRange;
-
-//         if (!playerInSightRange && !playerInAttackRange) Patroling();
-//         if (playerInSightRange && !playerInAttackRange) ChasePlayer();
-//         if (playerInAttackRange && playerInSightRange) AttackPlayer();
-//     }
-//     private void Patroling()
-//     {
-//         Debug.Log("Patrol");
-//         // if (!walkPointSet) SearchWalkPoint();
-//         // if (walkPointSet) agent.SetDestination(walkPoint);
-
-//         // Vector3 distanceToWalkPoint = transform.position - walkPoint;
-
-//         // // Walkpoint reached
-//         // if (distanceToWalkPoint.magnitude < 1f)
-//         // {
-//         //     walkPointSet = false;
-//         // }
-//     }
-//     private void SearchWalkPoint()
-//     {
-//         // Calculate random point in range
-//         float randomZ = Random.Range(-walkPointRange, walkPointRange);
-//         float randomX = Random.Range(-walkPointRange, walkPointRange);
-
-//         walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
-
-//         if (Physics.Raycast(walkPoint, -transform.up, 2f, groundMask))
-//         {
-//             walkPointSet = true;
-//         }
-//     }
-//     private void ChasePlayer()
-//     {
-//         // transform.LookAt(player);
-//         // Vector3 playerTerrainPos = new Vector3(player.position.x, transform.position.y, player.position.z);
-//         transform.LookAt(new Vector3(player.position.x, transform.position.y, player.position.z));
-//         transform.position += transform.forward * moveSpeed * Time.deltaTime;
-//     }
-//     private void AttackPlayer()
-//     {
-//         // Make sure enemy doesn't move
-//         // agent.SetDestination(transform.position);
-
-//         if (!alreadyAttacked)
-//         {
-//             // Attack code here
-//             animator.Play("base.attack", 0, 0);
-//             Debug.Log("Attacking player");
-
-
-//             alreadyAttacked = true;
-//             Invoke(nameof(ResetAttack), timeBetweenAttacks);
-//         }
-//     }
-//     private void ResetAttack()
-//     {
-//         alreadyAttacked = false;
-//     }
-
-//     private void OnDrawGizmosSelected()
-//     {
-//         Gizmos.color = Color.red;
-//         Gizmos.DrawWireSphere(transform.position, attackRange);
-//         Gizmos.color = Color.yellow;
-//         Gizmos.DrawWireSphere(transform.position, sightRange);
-//     }
-// }
-
-
 public class idleState : IState
 {
     Intelligence owner;
@@ -107,7 +10,6 @@ public class idleState : IState
     }
     public void Update()
     {
-        // if (!playerInSightRange && !playerInAttackRange) Patroling();
         if (owner.playerInSightRange && !owner.playerInAttackRange) owner.stateMachine.ChangeState(new chaseState(owner));
         if (owner.playerInAttackRange && owner.playerInSightRange) owner.stateMachine.ChangeState(new attackState(owner));
     }
@@ -127,8 +29,8 @@ public class chaseState : IState
     }
     public void Update()
     {
-        // if (!owner.playerInSightRange && !owner.playerInAttackRange) owner.stateMachine.ChangeState(new idleState(owner));
-        if (owner.playerInAttackRange && owner.playerInSightRange) owner.stateMachine.ChangeState(new attackState(owner));
+        if (!owner.playerInSightRange) owner.stateMachine.ChangeState(new ragedState(owner));
+        if (owner.playerInAttackRange) owner.stateMachine.ChangeState(new attackState(owner));
         owner.transform.LookAt(new Vector3(owner.player.position.x, owner.transform.position.y, owner.player.position.z));
         owner.transform.position += owner.transform.forward * owner.moveSpeed * Time.deltaTime;
         owner.setOnGround();
@@ -169,8 +71,6 @@ public class attackState : IState
     private Vector3 playerPos;
     private Vector3 enemyPos;
     private Vector3 unitDirection; // Unit vector to target
-    private float timeToReach;
-    private float t = 0;
     public void Enter()
     {
         Debug.Log("entering attack state");
@@ -180,23 +80,56 @@ public class attackState : IState
         unitDirection = (playerPos - enemyPos).normalized;
         owner.animator.Play("base.attack", 0, 0);
         owner.transform.LookAt(playerPos); // Look at target
-        timeToReach = owner.animator.GetCurrentAnimatorStateInfo(0).length;
     }
     public void Update()
     {
         if (owner.animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
         {
-            // Go back to idle state after attacking
-            owner.stateMachine.ChangeState(new idleState(owner));
+            if (Random.value >= 0.5)
+            {
+                // Go back to idle state after attacking
+                owner.stateMachine.ChangeState(new idleState(owner));
+            }
+            else
+            { // There's a chance he'll jump in frustration
+                owner.stateMachine.ChangeState(new jumpState(owner));
+            }
         }
         else if (owner.animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.6) // This is because the animation at this point, stops moving
         { // Move towards the target
             owner.transform.position += unitDirection * owner.moveSpeed * 4 * Time.deltaTime;
         }
+        if (owner.playerInDamageRange)
+        {
+            // Reduce player health
+            GameManager.Instance.playerHealth -= 10f;
+        }
     }
     public void Exit()
     {
         Debug.Log("exiting attack state");
+    }
+}
+public class jumpState : IState
+{
+    Intelligence owner;
+    public jumpState(Intelligence owner) { this.owner = owner; }
+    public void Enter()
+    {
+        Debug.Log("entering jump state");
+        owner.animator.Play("base.jump", 0, 0);
+    }
+    public void Update()
+    {
+        // If jump animation is done go back to idling
+        if (owner.animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
+        {
+            owner.stateMachine.ChangeState(new idleState(owner));
+        }
+    }
+    public void Exit()
+    {
+        Debug.Log("exiting jump state");
     }
 }
 public class hurtState : IState
@@ -219,7 +152,6 @@ public class hurtState : IState
     public void Exit()
     {
         Debug.Log("exiting hurt state");
-        // owner.Destroy(owner);
     }
 }
 public class deadState : IState
@@ -245,11 +177,9 @@ public class deadState : IState
 
 public class Intelligence : MonoBehaviour
 {
-    public float sightRange = 10f, attackRange = 5f, rageRange = 20f;
+    public float sightRange = 10f, attackRange = 5f, damageRange = 2f;
     public float moveSpeed = 2f;
     public float health = 100f;
-    public float timeTillNextAttack = 100f;
-    public bool inRage = false;
     public float rageMultiplier = 2f;
 
     public float height = 2f;
@@ -259,7 +189,7 @@ public class Intelligence : MonoBehaviour
 
 
     protected internal float halfHeight;
-    protected internal bool playerInSightRange, playerInAttackRange;
+    protected internal bool playerInSightRange, playerInAttackRange, playerInDamageRange;
     protected internal StateMachine stateMachine = new StateMachine();
 
     private void Start()
@@ -275,7 +205,7 @@ public class Intelligence : MonoBehaviour
     {
         playerInSightRange = Vector3.Distance(transform.position, player.position) <= sightRange;
         playerInAttackRange = Vector3.Distance(transform.position, player.position) <= attackRange;
-        inRage = Vector3.Distance(transform.position, player.position) <= rageRange;
+        playerInDamageRange = Vector3.Distance(transform.position, player.position) <= damageRange;
         stateMachine.Update();
     }
 
@@ -324,8 +254,6 @@ public class Intelligence : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, attackRange);
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, sightRange);
-        Gizmos.color = Color.magenta;
-        Gizmos.DrawWireSphere(transform.position, sightRange * rageMultiplier);
     }
 
 }
