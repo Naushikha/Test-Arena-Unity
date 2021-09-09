@@ -27,9 +27,9 @@ public class gunScript : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
         {
-            Debug.Log(hit.transform.name);
+            // Debug.Log(hit.transform.name);
 
-            Target target = hit.transform.root.gameObject.GetComponent<Target>();
+            Intelligence target = hit.transform.root.gameObject.GetComponent<Intelligence>();
 
             if (target != null)
             {

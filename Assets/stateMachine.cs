@@ -19,6 +19,10 @@ public class StateMachine
         currentState.Enter();
     }
 
+    public IState GetState(){
+        return currentState;
+    }
+
     public void Update()
     {
         if (currentState != null) currentState.Update();

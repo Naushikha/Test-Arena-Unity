@@ -39,6 +39,45 @@ ModelImporter:
   - first:
       74: 4970980767678404352
     second: alien|run
+  - first:
+      74: -6239216113759591374
+    second: attack
+  - first:
+      74: 2078859898789298028
+    second: die_backwards1
+  - first:
+      74: 1975354964157827610
+    second: die_backwards2
+  - first:
+      74: 1729854750250059770
+    second: die_forwards
+  - first:
+      74: 62129542535180861
+    second: die_simple
+  - first:
+      74: 7488372107075058011
+    second: die_spin
+  - first:
+      74: -2026189244150842331
+    second: gutshot
+  - first:
+      74: 4865135427386681508
+    second: headshot
+  - first:
+      74: -5252816984213320552
+    second: idle
+  - first:
+      74: -2993534804863918692
+    second: jump
+  - first:
+      74: 8812664444844753868
+    second: look_idle
+  - first:
+      74: 6200578666267062213
+    second: run
+  - first:
+      74: 5975498840105758557
+    second: flinch
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -68,7 +107,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: alien|attack
+      name: attack
       takeName: alien|attack
       internalID: 0
       firstFrame: 0
@@ -97,7 +136,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: alien|die_backwards1
+      name: die_backwards1
       takeName: alien|die_backwards1
       internalID: 0
       firstFrame: 0
@@ -126,7 +165,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: alien|die_backwards2
+      name: die_backwards2
       takeName: alien|die_backwards2
       internalID: 0
       firstFrame: 0
@@ -155,7 +194,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: alien|die_forwards
+      name: die_forwards
       takeName: alien|die_forwards
       internalID: 0
       firstFrame: 0
@@ -184,7 +223,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: alien|die_simple
+      name: die_simple
       takeName: alien|die_simple
       internalID: 0
       firstFrame: 0
@@ -213,7 +252,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: alien|die_spin
+      name: die_spin
       takeName: alien|die_spin
       internalID: 0
       firstFrame: 0
@@ -242,7 +281,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: alien|gutshot
+      name: gutshot
       takeName: alien|gutshot
       internalID: 0
       firstFrame: 0
@@ -271,7 +310,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: alien|headshot
+      name: headshot
       takeName: alien|headshot
       internalID: 0
       firstFrame: 0
@@ -300,7 +339,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: alien|idle
+      name: idle
       takeName: alien|idle
       internalID: 0
       firstFrame: 0
@@ -329,7 +368,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: alien|jump
+      name: jump
       takeName: alien|jump
       internalID: 0
       firstFrame: 0
@@ -358,7 +397,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: alien|look_idle
+      name: look_idle
       takeName: alien|look_idle
       internalID: 0
       firstFrame: 0
@@ -387,7 +426,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: alien|run
+      name: run
       takeName: alien|run
       internalID: 0
       firstFrame: 0
@@ -399,6 +438,35 @@ ModelImporter:
       loop: 0
       hasAdditiveReferencePose: 0
       loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: flinch
+      takeName: alien|headshot
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 8
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
