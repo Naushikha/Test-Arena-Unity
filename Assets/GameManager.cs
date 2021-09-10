@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     public float playerHealth = 100f;
 
     public GameObject healthText;
+    public GameObject noEscape;
+
 
     private void Awake()
     {
