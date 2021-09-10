@@ -1,51 +1,54 @@
 fileFormatVersion: 2
-guid: 7dcabc090959bcff6bd2c533b1e53e16
+guid: abce8b6e76f0ddef88b05e8d5403b499
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable:
   - first:
-      74: 8174044234092760012
+      74: -4175173208395517889
     second: draw
   - first:
-      74: 3752852914706628467
+      74: 60904924575745145
     second: reload
   - first:
-      74: -5715514756155534590
-    second: shoot
-  - first:
-      74: 921917904432284682
-    second: deagle|shoot2
-  - first:
-      74: 7100921734630691839
-    second: deagle|shoot_empty
-  - first:
-      74: -2018009734695613076
-    second: deagle|idle
-  - first:
-      74: 228231433491004179
+      74: 6681841001964816056
     second: shoot1
   - first:
-      74: -8571878293964440510
+      74: 4069434262887721094
     second: shoot2
   - first:
-      74: -5252816984213320552
-    second: idle
+      74: 1870014135848276976
+    second: shoot3
   externalObjects:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: DE_handle.bmp
-    second: {fileID: 2100000, guid: 4d2199a42ced1f40ca191a59182b64ff, type: 2}
+      name: barrel.bmp
+    second: {fileID: 2100000, guid: 62f4c464503db51a3ab344f229f5e526, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: DE_slide1.bmp
-    second: {fileID: 2100000, guid: a9753e5c4b8d8ae879849819310c4e7e, type: 2}
+      name: buttstock.bmp
+    second: {fileID: 2100000, guid: baa436280291aeb68a8f428721d325e1, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: DE_slide2_eagle.bmp
-    second: {fileID: 2100000, guid: 188c085ba3e20201a803042d1631e9ac, type: 2}
+      name: handle.bmp
+    second: {fileID: 2100000, guid: 2434644447edd941e910a13d6c7d4eba, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: magazine.bmp
+    second: {fileID: 2100000, guid: 677ce8edd20ee19f7b413948ccaa58a7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: receiver.bmp
+    second: {fileID: 2100000, guid: 316366f998ece280c9edee98adb31a6f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: silencer.bmp
+    second: {fileID: 2100000, guid: aca7353ab1f47ab488d91a19f30e4d04, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -90,10 +93,10 @@ ModelImporter:
     clipAnimations:
     - serializedVersion: 16
       name: draw
-      takeName: deagle|draw
+      takeName: v_m4a1.qc_skeleton|draw
       internalID: 0
       firstFrame: 0
-      lastFrame: 30
+      lastFrame: 40
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -119,10 +122,10 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: reload
-      takeName: deagle|reload
+      takeName: v_m4a1.qc_skeleton|reload
       internalID: 0
       firstFrame: 0
-      lastFrame: 65
+      lastFrame: 113
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -148,10 +151,10 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: shoot1
-      takeName: deagle|shoot1
+      takeName: v_m4a1.qc_skeleton|shoot1
       internalID: 0
       firstFrame: 0
-      lastFrame: 23
+      lastFrame: 30
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -177,10 +180,10 @@ ModelImporter:
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: shoot2
-      takeName: deagle|shoot2
+      takeName: v_m4a1.qc_skeleton|shoot2
       internalID: 0
       firstFrame: 0
-      lastFrame: 23
+      lastFrame: 30
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -205,10 +208,10 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: idle
-      takeName: deagle|draw
+      name: shoot3
+      takeName: v_m4a1.qc_skeleton|shoot3
       internalID: 0
-      firstFrame: 30
+      firstFrame: 0
       lastFrame: 30
       wrapMode: 0
       orientationOffsetY: 0
@@ -216,8 +219,8 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
-      loopBlend: 1
+      loopTime: 0
+      loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
@@ -287,8 +290,8 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 0.1
-    rootMotionBoneName: deagle
+    globalScale: 0.001
+    rootMotionBoneName: v_m4a1.qc_skeleton
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1

@@ -9,17 +9,23 @@ public interface IState
 public class StateMachine
 {
     IState currentState;
+    IState previousState;
 
     public void ChangeState(IState newState)
     {
         if (currentState != null)
             currentState.Exit();
 
+        previousState = currentState;
         currentState = newState;
         currentState.Enter();
     }
-
-    public IState GetState(){
+    public IState GetPreviousState()
+    {
+        return previousState;
+    }
+    public IState GetCurrentState()
+    {
         return currentState;
     }
 

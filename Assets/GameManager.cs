@@ -21,6 +21,11 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    void Start()
+    {
+        Text tmp = healthText.GetComponent<Text>();
+        tmp.text = "❤️ HEALTH: " + playerHealth;
+    }
     void Update()
     {
         if (playerHealth <= 0)

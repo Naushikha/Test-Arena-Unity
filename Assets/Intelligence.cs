@@ -25,6 +25,7 @@ public class chaseState : IState
     public void Enter()
     {
         Debug.Log("entering chase state");
+        owner.SFX_seen.Play();
         owner.animator.Play("base.run", 0, 0);
     }
     public void Update()
@@ -47,6 +48,7 @@ public class ragedState : IState
     public void Enter()
     {
         Debug.Log("entering raged state");
+        owner.SFX_seen.Play();
         owner.animator.Play("base.run_fast", 0, 0);
     }
     public void Update()
@@ -87,8 +89,9 @@ public class attackState : IState
         unitDirection = (targetPos - enemyPos).normalized;
         t = 0;
         owner.animator.Play("base.attack", 0, 0);
+        owner.SFX_attack.Play();
         timeToTarget = owner.animator.GetCurrentAnimatorStateInfo(0).length * 0.6f; // 0.6 // This is because the animation at this point, stops moving
-        owner.transform.LookAt(playerPos); // Look at target
+        owner.transform.LookAt(targetPos); // Look at target
     }
     public void Update()
     {
@@ -110,10 +113,10 @@ public class attackState : IState
             t += Time.deltaTime / timeToTarget;
             owner.transform.position = Vector3.Lerp(enemyPos, targetPos, t);
         }
-        if (owner.playerInDamageRange && (0.4 <= animTime && animTime <= 0.45))
+        if (owner.playerInDamageRange && (0.3 <= animTime && animTime <= 0.45))
         {
             // Reduce player health
-            GameManager.Instance.playerHurt(10f);
+            GameManager.Instance.playerHurt(2f);
         }
     }
     public void Exit()
@@ -147,17 +150,33 @@ public class hurtState : IState
 {
     Intelligence owner;
     public hurtState(Intelligence owner) { this.owner = owner; }
+    private bool wasEnraged;
     public void Enter()
     {
         Debug.Log("entering hurt state");
         owner.animator.Play("base.flinch", 0, 0);
+        owner.SFX_hurt.Play();
+        if (owner.stateMachine.GetPreviousState() is ragedState)
+        {
+            owner.rageMultiplier *= 1.3f; // Make him even angrier
+            wasEnraged = true;
+        }
     }
     public void Update()
     {
-        // If hurt animation is done go back to idling
+        // If hurt animation is done go back to idling OR RAGE!
         if (owner.animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
         {
-            owner.stateMachine.ChangeState(new idleState(owner));
+            if (wasEnraged)
+            {
+                owner.stateMachine.ChangeState(new ragedState(owner));
+
+            }
+            else
+            {
+                owner.stateMachine.ChangeState(new idleState(owner));
+
+            }
         }
     }
     public void Exit()
@@ -173,6 +192,7 @@ public class deadState : IState
     {
         Debug.Log("entering dead state");
         owner.animator.Play("base.die_spin", 0, 0);
+        owner.SFX_die.Play();
     }
     public void Update()
     {
@@ -196,6 +216,12 @@ public class Intelligence : MonoBehaviour
     public float height = 2f;
     public Transform player;
     public Terrain ground;
+    // SFX
+    public AudioSource SFX_seen;
+    public AudioSource SFX_hurt;
+    public AudioSource SFX_attack;
+    public AudioSource SFX_die;
+
     protected internal Animator animator;
 
 
@@ -223,7 +249,7 @@ public class Intelligence : MonoBehaviour
     public void takeDamage(float amount)
     {
         // Do not take damage if dead
-        if (stateMachine.GetState() is deadState)
+        if (stateMachine.GetCurrentState() is deadState)
         {
             return;
         }
@@ -235,15 +261,16 @@ public class Intelligence : MonoBehaviour
         else
         {
             health -= amount;
-            if (Random.value >= 0.7)
-            {
-                stateMachine.ChangeState(new hurtState(this));
-            }
-            // If the player was not to be seen, get enraged
-            if (!playerInSightRange)
+            // If the player was not to be seen and this dude was just chillin', get enraged
+            if (!playerInSightRange && (stateMachine.GetCurrentState() is idleState))
             {
                 // Go to raged state
                 stateMachine.ChangeState(new ragedState(this));
+                return;
+            }
+            if (Random.value >= 0.7)
+            {
+                stateMachine.ChangeState(new hurtState(this));
             }
         }
     }
