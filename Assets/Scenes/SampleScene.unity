@@ -5297,7 +5297,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerHealth: 100
-  healthText: {fileID: 1377672678}
+  txtHealth: {fileID: 1377672680}
+  txtAmmo: {fileID: 622529480}
   noEscape: {fileID: 163872364}
 --- !u!4 &274732017
 Transform:
@@ -6293,6 +6294,10 @@ MonoBehaviour:
   damage: 10
   range: 100
   fireRate: 12
+  magazines: 5
+  ammoInMag: 20
+  currentAmmo: 0
+  currentMags: 0
   NumOfShootAnimations: 3
   SFX_fire: {fileID: 323927255}
 --- !u!1 &417591534
@@ -13098,6 +13103,10 @@ MonoBehaviour:
   damage: 5.76
   range: 100
   fireRate: 3
+  magazines: 5
+  ammoInMag: 20
+  currentAmmo: 0
+  currentMags: 0
   NumOfShootAnimations: 2
   SFX_fire: {fileID: 417591536}
 --- !u!1 &1574057604
@@ -13331,7 +13340,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1224145596165060723, guid: 7dcabc090959bcff6bd2c533b1e53e16, type: 3}
       propertyPath: m_Name
-      value: gun
+      value: ref_deonly
       objectReference: {fileID: 0}
     - target: {fileID: 3173693906665935577, guid: 7dcabc090959bcff6bd2c533b1e53e16, type: 3}
       propertyPath: m_LocalRotation.x

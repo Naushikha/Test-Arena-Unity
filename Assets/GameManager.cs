@@ -7,8 +7,10 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
     public float playerHealth = 100f;
 
-    public GameObject healthText;
+    public Text txtHealth;
+    public Text txtAmmo;
     public GameObject noEscape;
+
 
 
     private void Awake()
@@ -25,8 +27,7 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        Text tmp = healthText.GetComponent<Text>();
-        tmp.text = "❤️ HEALTH: " + playerHealth;
+        txtHealth.text = "❤️ HEALTH: " + playerHealth;
     }
     void Update()
     {
@@ -39,10 +40,7 @@ public class GameManager : MonoBehaviour
     public void playerHurt(float amount)
     {
         playerHealth -= amount;
-        Debug.Log("Player hurt!");
-        Debug.Log(playerHealth);
-        Text tmp = healthText.GetComponent<Text>();
-        tmp.text = "Health left: " + playerHealth;
+        txtHealth.text = "❤️ HEALTH: " + playerHealth;
         // StartCoroutine("Fade");
     }
 

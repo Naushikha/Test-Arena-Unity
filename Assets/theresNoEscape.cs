@@ -12,9 +12,6 @@ public class theresNoEscape : MonoBehaviour
     {
         valMin = warningOffset;
         valMax = terrainSize - warningOffset;
-        Debug.Log(valMin);
-        Debug.Log(valMax);
-
     }
 
     // Update is called once per frame
@@ -27,7 +24,6 @@ public class theresNoEscape : MonoBehaviour
         }
         else
         {
-            // Debug.Log(transform.position);
             GameManager.Instance.noEscape.SetActive(false);
         }
     }
