@@ -70,7 +70,11 @@ public class attackState : IState
 
     private Vector3 playerPos;
     private Vector3 enemyPos;
+    private Vector3 targetPos;
     private Vector3 unitDirection; // Unit vector to target
+
+    private float t;
+    private float timeToTarget;
     public void Enter()
     {
         Debug.Log("entering attack state");
@@ -78,12 +82,18 @@ public class attackState : IState
         playerPos.y = owner.ground.SampleHeight(playerPos) + owner.halfHeight; // Prevents jumping into mid-air when player's last position is on air.
         enemyPos = owner.transform.position;
         unitDirection = (playerPos - enemyPos).normalized;
+        targetPos = (enemyPos + (unitDirection * owner.attackJumpDistance));
+        targetPos.y = owner.ground.SampleHeight(targetPos) + owner.halfHeight;
+        unitDirection = (targetPos - enemyPos).normalized;
+        t = 0;
         owner.animator.Play("base.attack", 0, 0);
+        timeToTarget = owner.animator.GetCurrentAnimatorStateInfo(0).length * 0.6f; // 0.6 // This is because the animation at this point, stops moving
         owner.transform.LookAt(playerPos); // Look at target
     }
     public void Update()
     {
-        if (owner.animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
+        float animTime = owner.animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+        if (animTime > 1)
         {
             if (Random.value >= 0.5)
             {
@@ -95,14 +105,15 @@ public class attackState : IState
                 owner.stateMachine.ChangeState(new jumpState(owner));
             }
         }
-        else if (owner.animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.6) // This is because the animation at this point, stops moving
+        else if (animTime < 0.6) // This is because the animation at this point, stops moving
         { // Move towards the target
-            owner.transform.position += unitDirection * owner.moveSpeed * 4 * Time.deltaTime;
+            t += Time.deltaTime / timeToTarget;
+            owner.transform.position = Vector3.Lerp(enemyPos, targetPos, t);
         }
-        if (owner.playerInDamageRange)
+        if (owner.playerInDamageRange && (0.4 <= animTime && animTime <= 0.45))
         {
             // Reduce player health
-            GameManager.Instance.playerHealth -= 10f;
+            GameManager.Instance.playerHurt(10f);
         }
     }
     public void Exit()
@@ -177,7 +188,7 @@ public class deadState : IState
 
 public class Intelligence : MonoBehaviour
 {
-    public float sightRange = 10f, attackRange = 5f, damageRange = 2f;
+    public float sightRange = 10f, attackRange = 5f, damageRange = 2f, attackJumpDistance = 4f;
     public float moveSpeed = 2f;
     public float health = 100f;
     public float rageMultiplier = 2f;
