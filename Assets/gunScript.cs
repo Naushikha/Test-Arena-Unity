@@ -10,8 +10,8 @@ public class gunScript : MonoBehaviour
     public float fireRate = 15f;
     public int magazines = 5;
     public int ammoInMag = 20;
-    public int currentAmmo;
-    public int currentMags;
+    private int currentAmmo;
+    private int currentMags;
     public int NumOfShootAnimations = 2;
 
     // SFX
@@ -47,8 +47,6 @@ public class gunScript : MonoBehaviour
         if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire)
         {
             nextTimeToFire = Time.time + 1f / fireRate;
-            SFX_fire.pitch = Random.Range(0.9f, 1.1f);
-            SFX_fire.Play();
             Shoot();
         }
         if (Input.GetKeyDown(KeyCode.R) && ammoInMag != currentAmmo)
@@ -62,6 +60,8 @@ public class gunScript : MonoBehaviour
         displayHUDAmmo();
         animator.Play("base.shoot" + Random.Range(1, NumOfShootAnimations + 1), 0, 0);
         // Play sound here
+        SFX_fire.pitch = Random.Range(0.95f, 1.05f);
+        SFX_fire.Play();
         muzzleFlash.Play();
         RaycastHit hit;
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
@@ -98,7 +98,7 @@ public class gunScript : MonoBehaviour
     {
         isDrawing = true;
         SFX_draw.Play();
-        animator.Play("base.draw");
+        animator.Play("base.draw", 0, 0);
         while (!(animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1))
         {
             yield return null;
