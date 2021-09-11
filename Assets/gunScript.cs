@@ -16,6 +16,7 @@ public class gunScript : MonoBehaviour
 
     // SFX
     public AudioSource SFX_fire;
+    public AudioSource SFX_draw;
 
     private float nextTimeToFire = 0f;
     private bool isReloading = false;
@@ -96,6 +97,7 @@ public class gunScript : MonoBehaviour
     IEnumerator draw()
     {
         isDrawing = true;
+        SFX_draw.Play();
         animator.Play("base.draw");
         while (!(animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1))
         {

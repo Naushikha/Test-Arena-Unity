@@ -1,22 +1,40 @@
 fileFormatVersion: 2
-guid: abce8b6e76f0ddef88b05e8d5403b499
+guid: 694c559c7a5c7a817be412be8ca39f56
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable:
   - first:
       74: -4175173208395517889
-    second: draw
+    second: v_m4a1.qc_skeleton|draw
+  - first:
+      74: 4509220094911727240
+    second: v_m4a1.qc_skeleton|idle
   - first:
       74: 60904924575745145
-    second: reload
+    second: v_m4a1.qc_skeleton|reload
   - first:
       74: 6681841001964816056
-    second: shoot1
+    second: v_m4a1.qc_skeleton|shoot1
   - first:
       74: 4069434262887721094
-    second: shoot2
+    second: v_m4a1.qc_skeleton|shoot2
   - first:
       74: 1870014135848276976
+    second: v_m4a1.qc_skeleton|shoot3
+  - first:
+      74: -7462351310864969694
+    second: draw
+  - first:
+      74: 641136364113939877
+    second: reload
+  - first:
+      74: 228231433491004179
+    second: shoot1
+  - first:
+      74: -8571878293964440510
+    second: shoot2
+  - first:
+      74: -431158374512709426
     second: shoot3
   externalObjects:
   - first:
