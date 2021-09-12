@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class knifeScript : MonoBehaviour
@@ -8,6 +9,7 @@ public class knifeScript : MonoBehaviour
     public float range = 1f;
     public float fireRate = 1f;
 
+    public Image crosshair;
     // SFX
     public AudioSource SFX_fire_hit;
     public AudioSource SFX_fire_none;
@@ -58,11 +60,13 @@ public class knifeScript : MonoBehaviour
     IEnumerator waitTilldraw()
     {
         isDrawing = true;
+        crosshairVisible(0); // make crosshair go away
         animator.Play("base.draw", 0, 0);
         while (!(animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1))
         {
             yield return null;
         }
+        crosshairVisible(1); // put crosshair back
         isDrawing = false;
     }
     void OnEnable()
@@ -76,6 +80,12 @@ public class knifeScript : MonoBehaviour
 
     void displayHUDAmmo()
     {
-        GameManager.Instance.txtAmmo.text = "/̵͇̿̿/'̿̿ AMMO: ∞";
+        GameManager.Instance.txtAmmo.text = "AMMO | ∞";
+    }
+    void crosshairVisible(int alpha)
+    {
+        Color tmp = crosshair.color;
+        tmp.a = alpha;
+        crosshair.color = tmp;
     }
 }

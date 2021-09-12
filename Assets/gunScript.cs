@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class gunScript : MonoBehaviour
@@ -13,6 +14,8 @@ public class gunScript : MonoBehaviour
     private int currentAmmo;
     private int currentMags;
     public int NumOfShootAnimations = 2;
+
+    public Image crosshair;
 
     // SFX
     public AudioSource SFX_fire;
@@ -82,6 +85,7 @@ public class gunScript : MonoBehaviour
     {
         if (currentMags == 0) yield break;
         isReloading = true;
+        crosshairVisible(0); // make crosshair go away
         animator.Play("base.reload", 0, 0);
         yield return new WaitForSeconds(0.001f); // Add a tiny delay to reset animator?
         while (!(animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1)) // Wait until animation is over
@@ -91,16 +95,19 @@ public class gunScript : MonoBehaviour
         currentAmmo = ammoInMag;
         currentMags--;
         displayHUDAmmo();
+        crosshairVisible(1); // put crosshair back
         isReloading = false;
     }
     IEnumerator waitTillDraw()
     {
         isDrawing = true;
+        crosshairVisible(0); // make crosshair go away
         animator.Play("base.draw", 0, 0);
         while (!(animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1))
         {
             yield return null;
         }
+        crosshairVisible(1); // put crosshair back
         isDrawing = false;
         if (isReloading) // Switched previously in the middle of a reload?
         {
@@ -118,6 +125,13 @@ public class gunScript : MonoBehaviour
 
     void displayHUDAmmo()
     {
-        GameManager.Instance.txtAmmo.text = "🔫 AMMO: " + currentMags + " / " + currentAmmo;
+        GameManager.Instance.txtAmmo.text = "AMMO | " + currentMags + " / " + currentAmmo;
+    }
+
+    void crosshairVisible(int alpha)
+    {
+        Color tmp = crosshair.color;
+        tmp.a = alpha;
+        crosshair.color = tmp;
     }
 }

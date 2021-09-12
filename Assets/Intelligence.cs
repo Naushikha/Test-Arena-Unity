@@ -98,7 +98,7 @@ public class attackState : IState
         float animTime = owner.animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
         if (animTime > 1)
         {
-            if (Random.value >= 0.5)
+            if (Random.value >= 0.2)
             {
                 // Go back to idle state after attacking
                 owner.stateMachine.ChangeState(new idleState(owner));

@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        txtHealth.text = "❤️ HEALTH: " + playerHealth;
+        txtHealth.text = "HEALTH | " + playerHealth;
     }
     void Update()
     {
