@@ -188,23 +188,26 @@ public class deadState : IState
 {
     Intelligence owner;
     public deadState(Intelligence owner) { this.owner = owner; }
+
+    private bool killCountSet = false;
     public void Enter()
     {
         Debug.Log("entering dead state");
-        owner.animator.Play("base.die_spin", 0, 0);
+        owner.animator.Play("base." + owner.deathAnim[Random.Range(0, owner.deathAnim.Length)], 0, 0);
         owner.SFX_die.Play();
-        GameManager.Instance.alienKilled();
     }
     public void Update()
     {
-        // Something here 
-        // Fancy animations should go here
+        if (!killCountSet)
+        {
+            if (owner.animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
+            {
+                GameManager.Instance.alienKilled();
+                killCountSet = true;
+            }
+        }
     }
-    public void Exit()
-    {
-        Debug.Log("exiting dead state");
-        // owner.Destroy(owner);
-    }
+    public void Exit() { }
 }
 
 public class Intelligence : MonoBehaviour
@@ -223,6 +226,8 @@ public class Intelligence : MonoBehaviour
     public AudioSource SFX_attack;
     public AudioSource SFX_die;
     public AudioSource[] SFX_hit;
+
+    public string[] deathAnim;
 
     public ParticleSystem bloodSplash;
 

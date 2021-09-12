@@ -32,7 +32,7 @@ public class gunScript : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         currentAmmo = ammoInMag;
-        currentMags = --magazines;
+        currentMags = magazines - 1;
         displayHUDAmmo();
         StartCoroutine(waitTillDraw());
         initialized = true;
@@ -133,5 +133,12 @@ public class gunScript : MonoBehaviour
         Color tmp = crosshair.color;
         tmp.a = alpha;
         crosshair.color = tmp;
+    }
+
+    public void resetAmmo()
+    {
+        currentAmmo = ammoInMag;
+        currentMags = magazines - 1;
+        displayHUDAmmo();
     }
 }

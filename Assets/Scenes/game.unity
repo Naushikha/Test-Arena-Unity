@@ -10786,6 +10786,7 @@ MonoBehaviour:
   playerHealth: 100
   currentWave: 0
   alienPrefab: {fileID: 4907352163592679501}
+  weapons: {fileID: 1589609687}
   txtHealth: {fileID: 1377672680}
   txtAmmo: {fileID: 622529480}
   txtWave: {fileID: 861057962}
@@ -22776,6 +22777,38 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1516050439}
+    - target: {fileID: 4907352163755771840, guid: 7dca2607c7ea09abca5da1f414a5dc2f, type: 3}
+      propertyPath: deathAnim.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4907352163755771840, guid: 7dca2607c7ea09abca5da1f414a5dc2f, type: 3}
+      propertyPath: deathAnim.Array.data[0]
+      value: die_backwards1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4907352163755771840, guid: 7dca2607c7ea09abca5da1f414a5dc2f, type: 3}
+      propertyPath: deathAnim.Array.data[1]
+      value: die_backwards2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4907352163755771840, guid: 7dca2607c7ea09abca5da1f414a5dc2f, type: 3}
+      propertyPath: deathAnim.Array.data[2]
+      value: die_forwards
+      objectReference: {fileID: 0}
+    - target: {fileID: 4907352163755771840, guid: 7dca2607c7ea09abca5da1f414a5dc2f, type: 3}
+      propertyPath: deathAnim.Array.data[3]
+      value: die_simple
+      objectReference: {fileID: 0}
+    - target: {fileID: 4907352163755771840, guid: 7dca2607c7ea09abca5da1f414a5dc2f, type: 3}
+      propertyPath: deathAnim.Array.data[4]
+      value: die_spin
+      objectReference: {fileID: 0}
+    - target: {fileID: 4907352163755771840, guid: 7dca2607c7ea09abca5da1f414a5dc2f, type: 3}
+      propertyPath: deathAnim.Array.data[5]
+      value: gutshot
+      objectReference: {fileID: 0}
+    - target: {fileID: 4907352163755771840, guid: 7dca2607c7ea09abca5da1f414a5dc2f, type: 3}
+      propertyPath: deathAnim.Array.data[6]
+      value: headshot
+      objectReference: {fileID: 0}
     - target: {fileID: 5249793205438221359, guid: 7dca2607c7ea09abca5da1f414a5dc2f, type: 3}
       propertyPath: m_Name
       value: alien

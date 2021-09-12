@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public float playerHealth = 100f;
     public int currentWave = 0;
     public GameObject alienPrefab;
+    public Transform weapons;
     public Text txtHealth;
     public Text txtAmmo;
     public Text txtWave;
@@ -57,8 +58,19 @@ public class GameManager : MonoBehaviour
     public void alienKilled()
     {
         killedAliens++;
+        txtAliens.text = "LEFT | " + (prevAliens.Count - killedAliens);
         if (killedAliens == prevAliens.Count)
         {
+            // Refill ammo
+            foreach (Transform weapon in weapons)
+            {
+                Debug.Log(weapon);
+                gunScript target = weapon.gameObject.GetComponent<gunScript>();
+                if (target != null)
+                {
+                    target.resetAmmo();
+                }
+            }
             startNextWave();
         }
     }
