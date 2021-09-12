@@ -15,13 +15,13 @@ public class playerMovement : MonoBehaviour
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
 
+    // SFX for jumping
+    public AudioSource[] SFX_jump;
     bool isGrounded;
     Vector3 velocity;
-    // Start is called before the first frame update
-    void Start()
-    {
 
-    }
+    private int iJumpSFX;
+    private bool jumpSFXDone = true;
 
     // Update is called once per frame
     void Update()
@@ -46,10 +46,27 @@ public class playerMovement : MonoBehaviour
         controller.Move(move * cumSpeed * Time.deltaTime);
         if (Input.GetButton("Jump") && isGrounded)
         {
+            if (jumpSFXDone)
+            {
+                iJumpSFX = Random.Range(0, SFX_jump.Length);
+                SFX_jump[iJumpSFX].Play();
+                StartCoroutine(waitForJumpSFXDone());
+            }
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
         velocity.y += gravity * Time.deltaTime;
 
         controller.Move(velocity * Time.deltaTime);
+    }
+
+    IEnumerator waitForJumpSFXDone()
+    {
+        jumpSFXDone = false;
+        // while (SFX_jump[iJumpSFX].isPlaying)
+        // {
+        //     yield return null;
+        // }
+        yield return new WaitForSeconds(0.5f);
+        jumpSFXDone = true;
     }
 }

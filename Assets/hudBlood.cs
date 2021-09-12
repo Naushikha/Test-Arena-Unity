@@ -8,7 +8,8 @@ public class hudBlood : MonoBehaviour
     public float timePerIter = 0.05f;
     public RawImage bloodSplatter;
     public RectTransform bloodSplatterTransform;
-    public AudioSource SFX_player_hurt;
+    public AudioSource[] SFX_hurt;
+
     void OnEnable()
     {
         // Rotate blood texture randomly
@@ -17,7 +18,7 @@ public class hudBlood : MonoBehaviour
         if (Random.value >= 0.5) y = 180;
         if (Random.value >= 0.5) z = 180;
         bloodSplatterTransform.eulerAngles = new Vector3(x, y, z);
-        SFX_player_hurt.Play();
+        SFX_hurt[Random.Range(0, SFX_hurt.Length)].Play();
         StartCoroutine(fadeBlood());
     }
     IEnumerator fadeBlood()
