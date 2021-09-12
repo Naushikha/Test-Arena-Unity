@@ -221,6 +221,9 @@ public class Intelligence : MonoBehaviour
     public AudioSource SFX_hurt;
     public AudioSource SFX_attack;
     public AudioSource SFX_die;
+    public AudioSource[] SFX_hit;
+
+    public ParticleSystem bloodSplash;
 
     protected internal Animator animator;
 
@@ -261,6 +264,8 @@ public class Intelligence : MonoBehaviour
         else
         {
             health -= amount;
+            bloodSplash.Play();
+            SFX_hit[Random.Range(0, SFX_hit.Length)].Play();
             // If the player was not to be seen and this dude was just chillin', get enraged
             if (!playerInSightRange && (stateMachine.GetCurrentState() is idleState))
             {
