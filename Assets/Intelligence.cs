@@ -193,6 +193,7 @@ public class deadState : IState
         Debug.Log("entering dead state");
         owner.animator.Play("base.die_spin", 0, 0);
         owner.SFX_die.Play();
+        GameManager.Instance.alienKilled();
     }
     public void Update()
     {
