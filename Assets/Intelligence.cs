@@ -273,7 +273,12 @@ public class Intelligence : MonoBehaviour
                 stateMachine.ChangeState(new ragedState(this));
                 return;
             }
-            if (Random.value >= 0.7)
+            // Brutal difficulty! - if already hurt make him rage!
+            if (stateMachine.GetCurrentState() is hurtState && Random.value >= 0.9)
+            {
+                stateMachine.ChangeState(new ragedState(this));
+            }
+            if (Random.value >= 0.7) // And if raged do not go into hurt state?
             {
                 stateMachine.ChangeState(new hurtState(this));
             }
