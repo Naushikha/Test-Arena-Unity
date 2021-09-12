@@ -16,7 +16,6 @@ public class gunScript : MonoBehaviour
 
     // SFX
     public AudioSource SFX_fire;
-    public AudioSource SFX_draw;
 
     private float nextTimeToFire = 0f;
     private bool isReloading = false;
@@ -32,7 +31,7 @@ public class gunScript : MonoBehaviour
         currentAmmo = ammoInMag;
         currentMags = --magazines;
         displayHUDAmmo();
-        StartCoroutine(draw());
+        StartCoroutine(waitTillDraw());
         initialized = true;
     }
     void Update()
@@ -94,10 +93,9 @@ public class gunScript : MonoBehaviour
         displayHUDAmmo();
         isReloading = false;
     }
-    IEnumerator draw()
+    IEnumerator waitTillDraw()
     {
         isDrawing = true;
-        SFX_draw.Play();
         animator.Play("base.draw", 0, 0);
         while (!(animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1))
         {
@@ -114,7 +112,7 @@ public class gunScript : MonoBehaviour
         if (initialized) // Do not want calling NULL objects
         {
             displayHUDAmmo();
-            StartCoroutine(draw());
+            StartCoroutine(waitTillDraw());
         }
     }
 

@@ -11,7 +11,6 @@ public class knifeScript : MonoBehaviour
     // SFX
     public AudioSource SFX_fire_hit;
     public AudioSource SFX_fire_none;
-    public AudioSource SFX_draw;
 
     private float nextTimeToFire = 0f;
     private bool isDrawing = false;
@@ -24,7 +23,7 @@ public class knifeScript : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         displayHUDAmmo();
-        StartCoroutine(draw());
+        StartCoroutine(waitTilldraw());
         initialized = true;
     }
     void Update()
@@ -56,10 +55,9 @@ public class knifeScript : MonoBehaviour
         }
 
     }
-    IEnumerator draw()
+    IEnumerator waitTilldraw()
     {
         isDrawing = true;
-        SFX_draw.Play();
         animator.Play("base.draw", 0, 0);
         while (!(animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1))
         {
@@ -72,7 +70,7 @@ public class knifeScript : MonoBehaviour
         if (initialized) // Do not want calling NULL objects
         {
             displayHUDAmmo();
-            StartCoroutine(draw());
+            StartCoroutine(waitTilldraw());
         }
     }
 

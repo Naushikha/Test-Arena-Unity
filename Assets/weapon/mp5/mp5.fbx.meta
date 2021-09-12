@@ -129,7 +129,21 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.12700792
+        functionName: draw
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 679940929153eb839ba03a8a5ed86839, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.4183683
+        functionName: slideback
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 679940929153eb839ba03a8a5ed86839, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -158,7 +172,28 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.23655914
+        functionName: clipout
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 679940929153eb839ba03a8a5ed86839, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.4623656
+        functionName: clipin
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 679940929153eb839ba03a8a5ed86839, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.7642277
+        functionName: slideback
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 679940929153eb839ba03a8a5ed86839, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}

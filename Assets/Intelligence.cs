@@ -251,6 +251,8 @@ public class Intelligence : MonoBehaviour
 
     public void takeDamage(float amount)
     {
+        bloodSplash.Play();
+        SFX_hit[Random.Range(0, SFX_hit.Length)].Play();
         // Do not take damage if dead
         if (stateMachine.GetCurrentState() is deadState)
         {
@@ -264,8 +266,6 @@ public class Intelligence : MonoBehaviour
         else
         {
             health -= amount;
-            bloodSplash.Play();
-            SFX_hit[Random.Range(0, SFX_hit.Length)].Play();
             // If the player was not to be seen and this dude was just chillin', get enraged
             if (!playerInSightRange && (stateMachine.GetCurrentState() is idleState))
             {
