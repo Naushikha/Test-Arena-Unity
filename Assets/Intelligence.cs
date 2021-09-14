@@ -292,7 +292,7 @@ public class Intelligence : MonoBehaviour
             {
                 stateMachine.ChangeState(new ragedState(this));
             }
-            if (Random.value >= 0.7) // And if raged do not go into hurt state?
+            if (Random.value >= 0.7 && !(stateMachine.GetCurrentState() is ragedState)) // And if raged do not go into hurt state?
             {
                 stateMachine.ChangeState(new hurtState(this));
             }
