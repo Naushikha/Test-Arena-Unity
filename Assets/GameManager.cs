@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public int currentWave = 0;
     public GameObject alienPrefab;
     public Transform weapons;
+    public GameObject player;
     public Text txtHealth;
     public Text txtAmmo;
     public Text txtWave;
@@ -23,6 +24,13 @@ public class GameManager : MonoBehaviour
 
     private List<GameObject> prevAliens = new List<GameObject>();
     private int killedAliens = 0;
+
+    public Text txtWarning;
+    public string[] warningList;
+    private bool warningShown = false;
+
+    public GameObject gameMusic;
+    private int currentMusic = 0;
     private void Awake()
     {
         if (Instance == null)
@@ -77,7 +85,7 @@ public class GameManager : MonoBehaviour
     void startNextWave()
     {
         currentWave++;
-        txtWave.text = "Wave" + currentWave;
+        txtWave.text = "WAVE " + currentWave;
         txtWave.gameObject.SetActive(true);
         sfxWave.Play();
         // Destroy all previous aliens
@@ -102,7 +110,11 @@ public class GameManager : MonoBehaviour
             aliensToGen--;
         }
         txtAliens.text = "LEFT | " + prevAliens.Count;
+        Vector3 tmpPosition = new Vector3(16.2099991f, 7.15999985f, 5.38999987f);
+        player.transform.position = tmpPosition;
+        player.transform.eulerAngles = Vector3.zero;
         StartCoroutine(hideWave());
+        playNextMusic();
     }
     IEnumerator hideWave()
     {
@@ -121,5 +133,52 @@ public class GameManager : MonoBehaviour
         tmpReset = txtWave.color;
         tmpReset.a = 1f;
         txtWave.color = tmpReset;
+    }
+
+    public void showWarning()
+    {
+        if (!warningShown)
+        {
+            txtWarning.text = warningList[Random.Range(0, warningList.Length)];
+            txtWarning.gameObject.SetActive(true);
+            warningShown = true;
+            StartCoroutine(hideWarning());
+        }
+    }
+    IEnumerator hideWarning()
+    {
+        for (float f = 0f; f <= 1f; f += 0.05f)
+        {
+            Color tmp = txtWarning.color;
+            tmp.a = f;
+            txtWarning.color = tmp;
+            yield return new WaitForSeconds(0.01f);
+        }
+        yield return new WaitForSeconds(1f);
+        for (float f = 1f; f >= -0.05f; f -= 0.05f)
+        {
+            Color tmp = txtWarning.color;
+            tmp.a = f;
+            txtWarning.color = tmp;
+            yield return new WaitForSeconds(0.01f);
+        }
+        txtWarning.gameObject.SetActive(false);
+        Color tmpReset = txtWarning.color;
+        tmpReset = txtWarning.color;
+        tmpReset.a = 1f;
+        txtWarning.color = tmpReset;
+        yield return new WaitForSeconds(0.5f);
+        warningShown = false;
+    }
+
+    void playNextMusic()
+    {
+        gameMusic.transform.GetChild(currentMusic).GetComponent<AudioSource>().Stop();
+        currentMusic++;
+        if (gameMusic.transform.childCount - 1 == currentMusic)
+        {
+            currentMusic = 0;
+        }
+        gameMusic.transform.GetChild(currentMusic).GetComponent<AudioSource>().Play();
     }
 }

@@ -98,7 +98,7 @@ public class attackState : IState
         float animTime = owner.animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
         if (animTime > 1)
         {
-            if (Random.value >= 0.2)
+            if (Random.value >= 0.0) // Put 0.2 for minimal effect
             {
                 // Go back to idle state after attacking
                 owner.stateMachine.ChangeState(new idleState(owner));
@@ -213,6 +213,7 @@ public class deadState : IState
 public class Intelligence : MonoBehaviour
 {
     public float sightRange = 10f, attackRange = 5f, damageRange = 2f, attackJumpDistance = 4f;
+    public float warningRange = 15f;
     public float moveSpeed = 2f;
     public float health = 100f;
     public float rageMultiplier = 2f;
@@ -235,7 +236,7 @@ public class Intelligence : MonoBehaviour
 
 
     protected internal float halfHeight;
-    protected internal bool playerInSightRange, playerInAttackRange, playerInDamageRange;
+    protected internal bool playerInSightRange, playerInAttackRange, playerInDamageRange, playerInWarningRange;
     protected internal StateMachine stateMachine = new StateMachine();
 
     private void Start()
@@ -249,9 +250,16 @@ public class Intelligence : MonoBehaviour
 
     private void Update()
     {
-        playerInSightRange = Vector3.Distance(transform.position, player.position) <= sightRange;
-        playerInAttackRange = Vector3.Distance(transform.position, player.position) <= attackRange;
-        playerInDamageRange = Vector3.Distance(transform.position, player.position) <= damageRange;
+        float tmpPlayerDist = Vector3.Distance(transform.position, player.position);
+        playerInSightRange = tmpPlayerDist <= sightRange;
+        playerInAttackRange = tmpPlayerDist <= attackRange;
+        playerInDamageRange = tmpPlayerDist <= damageRange;
+        playerInWarningRange = tmpPlayerDist <= warningRange;
+        // Give warning hints to player
+        if (playerInWarningRange && !(stateMachine.GetCurrentState() is deadState))
+        {
+            GameManager.Instance.showWarning();
+        }
         stateMachine.Update();
     }
 
@@ -280,7 +288,7 @@ public class Intelligence : MonoBehaviour
                 return;
             }
             // Brutal difficulty! - if already hurt make him rage!
-            if (stateMachine.GetCurrentState() is hurtState && Random.value >= 0.9)
+            if (stateMachine.GetCurrentState() is hurtState && Random.value >= 0.5)
             {
                 stateMachine.ChangeState(new ragedState(this));
             }
