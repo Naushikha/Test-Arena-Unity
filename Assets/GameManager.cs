@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class GameManager : MonoBehaviour
     public Text txtAmmo;
     public Text txtWave;
     public Text txtAliens;
+    public Color blinkColor1;
+    public Color blinkColor2;
     public AudioSource sfxWave;
     public GameObject noEscape;
     public GameObject hud_blood;
@@ -36,7 +39,7 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            // DontDestroyOnLoad(gameObject); // I want this removed going back to menu
         }
         else
         {
@@ -48,23 +51,20 @@ public class GameManager : MonoBehaviour
         txtHealth.text = "HEALTH | " + playerHealth;
         startNextWave();
     }
-    void Update()
-    {
-        if (playerHealth <= 0)
-        {
-            // Debug.Log("PLAYER IS DEAD!");
-        }
-    }
-
     public void playerHurt(float amount)
     {
         if (!hud_blood.activeSelf) hud_blood.SetActive(true);
         playerHealth -= amount;
         txtHealth.text = "HEALTH | " + playerHealth;
-        // StartCoroutine("Fade");
+        if (playerHealth <= 0)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            SceneManager.LoadScene("menu");
+        }
     }
     public void alienKilled()
     {
+        StartCoroutine(blinkLeft());
         killedAliens++;
         txtAliens.text = "LEFT | " + (prevAliens.Count - killedAliens);
         if (killedAliens == prevAliens.Count)
@@ -180,5 +180,16 @@ public class GameManager : MonoBehaviour
             currentMusic = 0;
         }
         gameMusic.transform.GetChild(currentMusic).GetComponent<AudioSource>().Play();
+    }
+
+    IEnumerator blinkLeft()
+    {
+        for (int i = 0; i < 7; i++)
+        {
+            yield return new WaitForSeconds(0.2f);
+            txtAliens.color = blinkColor2;
+            yield return new WaitForSeconds(0.2f);
+            txtAliens.color = blinkColor1;
+        }
     }
 }

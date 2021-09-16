@@ -5,6 +5,10 @@ using System.Collections;
 public class knifeScript : MonoBehaviour
 {
     public Camera fpsCam;
+    public LayerMask playerMask;
+    public ParticleSystem alienBloodEffect;
+
+
     public float damage = 70f;
     public float range = 1f;
     public float fireRate = 1f;
@@ -42,7 +46,7 @@ public class knifeScript : MonoBehaviour
         animator.Play("base.shoot1", 0, 0);
         SFX_fire_none.Play();
         RaycastHit hit;
-        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
+        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range, ~playerMask))
         {
             // Debug.Log(hit.transform.name);
 
@@ -51,6 +55,8 @@ public class knifeScript : MonoBehaviour
             if (target != null)
             {
                 SFX_fire_hit.Play();
+                ParticleSystem bloodGO = Instantiate(alienBloodEffect, hit.point, Quaternion.LookRotation(hit.normal));
+                Destroy(bloodGO, 2f);
                 target.takeDamage(damage);
                 // Set damage according to how severe it is
             }

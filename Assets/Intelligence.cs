@@ -230,8 +230,6 @@ public class Intelligence : MonoBehaviour
 
     public string[] deathAnim;
 
-    public ParticleSystem bloodSplash;
-
     protected internal Animator animator;
 
 
@@ -265,7 +263,6 @@ public class Intelligence : MonoBehaviour
 
     public void takeDamage(float amount)
     {
-        bloodSplash.Play();
         SFX_hit[Random.Range(0, SFX_hit.Length)].Play();
         // Do not take damage if dead
         if (stateMachine.GetCurrentState() is deadState)

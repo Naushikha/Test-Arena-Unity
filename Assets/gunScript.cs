@@ -6,6 +6,9 @@ public class gunScript : MonoBehaviour
 {
     public Camera fpsCam;
     public ParticleSystem muzzleFlash;
+    public ParticleSystem impactEffect;
+    public ParticleSystem alienBloodEffect;
+    public LayerMask playerMask;
     public float damage = 10f;
     public float range = 100f;
     public float fireRate = 15f;
@@ -66,18 +69,23 @@ public class gunScript : MonoBehaviour
         SFX_fire.Play();
         muzzleFlash.Play();
         RaycastHit hit;
-        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
+        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range, ~playerMask))
         {
             // Debug.Log(hit.transform.name);
-
             Intelligence target = hit.transform.root.gameObject.GetComponent<Intelligence>();
 
             if (target != null)
             {
+                ParticleSystem bloodGO = Instantiate(alienBloodEffect, hit.point, Quaternion.LookRotation(hit.normal));
+                Destroy(bloodGO, 2f);
                 target.takeDamage(damage);
                 // Set damage according to how severe it is
             }
-
+            if (hit.transform.gameObject.layer == LayerMask.NameToLayer("ground")) // Check if ground
+            {
+                ParticleSystem impactGO = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+                Destroy(impactGO, 2f);
+            }
         }
 
     }
