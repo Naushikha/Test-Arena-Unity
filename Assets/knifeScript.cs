@@ -72,7 +72,7 @@ public class knifeScript : MonoBehaviour
         {
             yield return null;
         }
-        crosshairVisible(1); // put crosshair back
+        crosshairVisible(0.7f); // put crosshair back
         isDrawing = false;
     }
     void OnEnable()
@@ -88,7 +88,7 @@ public class knifeScript : MonoBehaviour
     {
         GameManager.Instance.txtAmmo.text = "AMMO | ∞";
     }
-    void crosshairVisible(int alpha)
+    void crosshairVisible(float alpha)
     {
         Color tmp = crosshair.color;
         tmp.a = alpha;

@@ -103,7 +103,7 @@ public class gunScript : MonoBehaviour
         currentAmmo = ammoInMag;
         currentMags--;
         displayHUDAmmo();
-        crosshairVisible(1); // put crosshair back
+        crosshairVisible(0.7f); // put crosshair back
         isReloading = false;
     }
     IEnumerator waitTillDraw()
@@ -115,7 +115,7 @@ public class gunScript : MonoBehaviour
         {
             yield return null;
         }
-        crosshairVisible(1); // put crosshair back
+        crosshairVisible(0.7f); // put crosshair back
         isDrawing = false;
         if (isReloading) // Switched previously in the middle of a reload?
         {
@@ -136,7 +136,7 @@ public class gunScript : MonoBehaviour
         GameManager.Instance.txtAmmo.text = "AMMO | " + currentMags + " / " + currentAmmo;
     }
 
-    void crosshairVisible(int alpha)
+    void crosshairVisible(float alpha)
     {
         Color tmp = crosshair.color;
         tmp.a = alpha;

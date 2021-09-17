@@ -7,6 +7,11 @@ using UnityEngine.SceneManagement;
 public class menuScript : MonoBehaviour
 {
     public Image player;
+
+    public Image title;
+    public Sprite defTitle;
+    public Sprite[] titleList;
+    public AudioSource[] titleSFXList;
     public Sprite[] animList;
     public int[] breakList;
     public float frameTime = 0.5f;
@@ -24,6 +29,7 @@ public class menuScript : MonoBehaviour
             breakFrame.Add(currFrame);
         }
         StartCoroutine(runAnim());
+        StartCoroutine(glitchTitle());
     }
     IEnumerator runAnim()
     {
@@ -50,6 +56,17 @@ public class menuScript : MonoBehaviour
         yield return new WaitForSeconds(frameTime);
         StartCoroutine(runAnim());
     }
+
+    IEnumerator glitchTitle()
+    {
+        yield return new WaitForSeconds(Random.Range(3, 7));
+        int rand = Random.Range(0, titleList.Length);
+        title.sprite = titleList[rand];
+        titleSFXList[rand].Play();
+        yield return new WaitForSeconds(0.2f);
+        title.sprite = defTitle;
+        StartCoroutine(glitchTitle());
+    }
     // Update is called once per frame
     void Update()
     {
@@ -58,7 +75,15 @@ public class menuScript : MonoBehaviour
 
     public void playGameScene()
     {
-        Debug.Log("clicked this nigga");
         SceneManager.LoadScene("game");
+    }
+
+    public void exitGame()
+    {
+        #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+        #else
+            Application.Quit();
+        #endif
     }
 }
