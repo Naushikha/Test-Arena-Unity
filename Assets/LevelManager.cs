@@ -72,7 +72,6 @@ public class LevelManager : MonoBehaviour
             // Refill ammo
             foreach (Transform weapon in weapons)
             {
-                Debug.Log(weapon);
                 gunScript target = weapon.gameObject.GetComponent<gunScript>();
                 if (target != null)
                 {

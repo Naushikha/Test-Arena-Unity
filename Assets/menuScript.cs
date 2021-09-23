@@ -66,14 +66,9 @@ public class menuScript : MonoBehaviour
         title.sprite = defTitle;
         StartCoroutine(glitchTitle());
     }
-    // Update is called once per frame
-    void Update()
+    public void playGameScene(float difficulty)
     {
-
-    }
-
-    public void playGameScene()
-    {
+        GameManager.Instance.setDifficulty(difficulty);
         SceneManager.LoadScene("game");
     }
 
@@ -84,5 +79,13 @@ public class menuScript : MonoBehaviour
 #else
             Application.Quit();
 #endif
+    }
+    public void openPanel(GameObject panel)
+    {
+        panel.SetActive(true);
+    }
+    public void closePanel(GameObject panel)
+    {
+        panel.SetActive(false);
     }
 }

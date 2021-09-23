@@ -5,7 +5,6 @@ public class idleState : IState
     public idleState(Intelligence owner) { this.owner = owner; }
     public void Enter()
     {
-        Debug.Log("entering idle state");
         owner.animator.Play("base.idle", 0, 0);
     }
     public void Update()
@@ -13,10 +12,7 @@ public class idleState : IState
         if (owner.playerInSightRange && !owner.playerInAttackRange) owner.stateMachine.ChangeState(new chaseState(owner));
         if (owner.playerInAttackRange && owner.playerInSightRange) owner.stateMachine.ChangeState(new attackState(owner));
     }
-    public void Exit()
-    {
-        Debug.Log("exiting idle state");
-    }
+    public void Exit() { }
 }
 public class chaseState : IState
 {
@@ -24,7 +20,6 @@ public class chaseState : IState
     public chaseState(Intelligence owner) { this.owner = owner; }
     public void Enter()
     {
-        Debug.Log("entering chase state");
         owner.SFX_seen.Play();
         owner.animator.Play("base.run", 0, 0);
     }
@@ -36,10 +31,7 @@ public class chaseState : IState
         owner.transform.position += owner.transform.forward * owner.moveSpeed * Time.deltaTime;
         owner.setOnGround();
     }
-    public void Exit()
-    {
-        Debug.Log("exiting chase state");
-    }
+    public void Exit() { }
 }
 public class ragedState : IState
 {
@@ -47,7 +39,6 @@ public class ragedState : IState
     public ragedState(Intelligence owner) { this.owner = owner; }
     public void Enter()
     {
-        Debug.Log("entering raged state");
         owner.SFX_seen.Play();
         owner.animator.Play("base.run_fast", 0, 0);
     }
@@ -60,10 +51,7 @@ public class ragedState : IState
         owner.transform.position += owner.transform.forward * owner.moveSpeed * owner.rageMultiplier * Time.deltaTime;
         owner.setOnGround();
     }
-    public void Exit()
-    {
-        Debug.Log("exiting raged state");
-    }
+    public void Exit() { }
 }
 public class attackState : IState
 {
@@ -79,7 +67,6 @@ public class attackState : IState
     private float timeToTarget;
     public void Enter()
     {
-        Debug.Log("entering attack state");
         playerPos = owner.player.transform.position;
         playerPos.y = owner.ground.SampleHeight(playerPos) + owner.halfHeight; // Prevents jumping into mid-air when player's last position is on air.
         enemyPos = owner.transform.position;
@@ -119,10 +106,7 @@ public class attackState : IState
             LevelManager.Instance.playerHurt(2f);
         }
     }
-    public void Exit()
-    {
-        Debug.Log("exiting attack state");
-    }
+    public void Exit() { }
 }
 public class jumpState : IState
 {
@@ -130,7 +114,6 @@ public class jumpState : IState
     public jumpState(Intelligence owner) { this.owner = owner; }
     public void Enter()
     {
-        Debug.Log("entering jump state");
         owner.animator.Play("base.jump", 0, 0);
     }
     public void Update()
@@ -141,10 +124,7 @@ public class jumpState : IState
             owner.stateMachine.ChangeState(new idleState(owner));
         }
     }
-    public void Exit()
-    {
-        Debug.Log("exiting jump state");
-    }
+    public void Exit() { }
 }
 public class hurtState : IState
 {
@@ -153,7 +133,6 @@ public class hurtState : IState
     private bool wasEnraged;
     public void Enter()
     {
-        Debug.Log("entering hurt state");
         owner.animator.Play("base.flinch", 0, 0);
         owner.SFX_hurt.Play();
         if (owner.stateMachine.GetPreviousState() is ragedState)
@@ -179,10 +158,7 @@ public class hurtState : IState
             }
         }
     }
-    public void Exit()
-    {
-        Debug.Log("exiting hurt state");
-    }
+    public void Exit() { }
 }
 public class deadState : IState
 {
@@ -192,7 +168,6 @@ public class deadState : IState
     private bool killCountSet = false;
     public void Enter()
     {
-        Debug.Log("entering dead state");
         owner.animator.Play("base." + owner.deathAnim[Random.Range(0, owner.deathAnim.Length)], 0, 0);
         owner.SFX_die.Play();
     }
@@ -244,6 +219,20 @@ public class Intelligence : MonoBehaviour
         halfHeight = height / 2;
         setOnGround(); // Set him on the ground
         stateMachine.ChangeState(new idleState(this));
+        // Check difficulty of arena, if defined
+        if (GameManager.Instance)
+        {
+            // Get difficulty from game
+            float difficulty = GameManager.Instance.difficulty;
+            sightRange *= difficulty;
+            attackRange *= difficulty;
+            damageRange *= difficulty;
+            attackJumpDistance *= difficulty;
+            warningRange *= difficulty;
+            moveSpeed *= difficulty;
+            health *= difficulty;
+            rageMultiplier *= difficulty;
+        }
     }
 
     private void Update()
