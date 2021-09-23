@@ -8,17 +8,17 @@ public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance { get; private set; }
     public float playerHealth = 100f;
-    public int currentWave = 0;
+    public int currentLevel = 0;
     public GameObject alienPrefab;
     public Transform weapons;
     public GameObject player;
     public Text txtHealth;
     public Text txtAmmo;
-    public Text txtWave;
+    public Text txtLevel;
     public Text txtAliens;
     public Color blinkColor1;
     public Color blinkColor2;
-    public AudioSource sfxWave;
+    public AudioSource sfxLevel;
     public GameObject noEscape;
     public GameObject hud_blood;
 
@@ -49,7 +49,7 @@ public class LevelManager : MonoBehaviour
     void Start()
     {
         txtHealth.text = "HEALTH | " + playerHealth;
-        startNextWave();
+        startNextLevel();
     }
     public void playerHurt(float amount)
     {
@@ -79,15 +79,15 @@ public class LevelManager : MonoBehaviour
                     target.resetAmmo();
                 }
             }
-            startNextWave();
+            startNextLevel();
         }
     }
-    void startNextWave()
+    void startNextLevel()
     {
-        currentWave++;
-        txtWave.text = "WAVE " + currentWave;
-        txtWave.gameObject.SetActive(true);
-        sfxWave.Play();
+        currentLevel++;
+        txtLevel.text = "LEVEL " + currentLevel;
+        txtLevel.gameObject.SetActive(true);
+        sfxLevel.Play();
         // Destroy all previous aliens
         if (prevAliens != null)
         {
@@ -98,7 +98,7 @@ public class LevelManager : MonoBehaviour
         }
         killedAliens = 0;
         prevAliens.Clear();
-        int aliensToGen = (int)Mathf.Pow(2, currentWave);
+        int aliensToGen = (int)Mathf.Pow(2, currentLevel);
         while (aliensToGen > 0)
         {
             int randX = Random.Range(25, 95);
@@ -113,26 +113,26 @@ public class LevelManager : MonoBehaviour
         Vector3 tmpPosition = new Vector3(16.2099991f, 7.15999985f, 5.38999987f);
         player.transform.position = tmpPosition;
         player.transform.eulerAngles = Vector3.zero;
-        StartCoroutine(hideWave());
+        StartCoroutine(hideLevel());
         playNextMusic();
     }
-    IEnumerator hideWave()
+    IEnumerator hideLevel()
     {
         RenderSettings.skybox = skybox_virtual;
         yield return new WaitForSeconds(3);
         for (float f = 1f; f >= -0.05f; f -= 0.05f)
         {
-            Color tmp = txtWave.color;
+            Color tmp = txtLevel.color;
             tmp.a = f;
-            txtWave.color = tmp;
+            txtLevel.color = tmp;
             yield return new WaitForSeconds(0.1f);
         }
         RenderSettings.skybox = skybox_default;
-        txtWave.gameObject.SetActive(false);
-        Color tmpReset = txtWave.color;
-        tmpReset = txtWave.color;
+        txtLevel.gameObject.SetActive(false);
+        Color tmpReset = txtLevel.color;
+        tmpReset = txtLevel.color;
         tmpReset.a = 1f;
-        txtWave.color = tmpReset;
+        txtLevel.color = tmpReset;
     }
 
     public void showWarning()
