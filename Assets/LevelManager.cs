@@ -66,7 +66,7 @@ public class LevelManager : MonoBehaviour
     {
         StartCoroutine(blinkLeft());
         killedAliens++;
-        txtAliens.text = "LEFT | " + (prevAliens.Count - killedAliens);
+        txtAliens.text = "(:|:) LEFT | " + (prevAliens.Count - killedAliens);
         if (killedAliens == prevAliens.Count)
         {
             // Refill ammo
@@ -109,7 +109,7 @@ public class LevelManager : MonoBehaviour
             prevAliens.Add(newAlien);
             aliensToGen--;
         }
-        txtAliens.text = "LEFT | " + prevAliens.Count;
+        txtAliens.text = "(:|:) LEFT | " + prevAliens.Count;
         Vector3 tmpPosition = new Vector3(16.2099991f, 7.15999985f, 5.38999987f);
         player.transform.position = tmpPosition;
         player.transform.eulerAngles = Vector3.zero;
