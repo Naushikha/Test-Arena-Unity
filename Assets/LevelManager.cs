@@ -59,13 +59,16 @@ public class LevelManager : MonoBehaviour
         if (playerHealth <= 0)
         {
             Cursor.lockState = CursorLockMode.None;
-            SceneManager.LoadScene("menu");
+            GameManager.Instance.currentLevel = currentLevel;
+            GameManager.Instance.score = Mathf.FloorToInt(GameManager.Instance.aliensKilled * 10 * GameManager.Instance.difficulty * (1 + (currentLevel / 6)));
+            SceneManager.LoadScene("score");
         }
     }
     public void alienKilled()
     {
         StartCoroutine(blinkLeft());
         killedAliens++;
+        GameManager.Instance.aliensKilled++; // Increase aliens for score
         txtAliens.text = "(:|:) LEFT | " + (prevAliens.Count - killedAliens);
         if (killedAliens == prevAliens.Count)
         {
