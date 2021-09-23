@@ -1645,7 +1645,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: a549794c84578b7bba67badffcd19e37, type: 3}
   - {fileID: 21300000, guid: ca264ab05a442cf789f7e79ddd60242e, type: 3}
   breakList: 03000000050000000d0000001600000012000000060000000800000004000000
-  frameTime: 0.2
+  frameTime: 0.15
   breakTime: 5
 --- !u!1 &1987847320
 GameObject:
@@ -1772,7 +1772,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.4528302, g: 0.4528302, b: 0.4528302, a: 1}
+  m_Color: {r: 0.4528302, g: 0.4528302, b: 0.4528302, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

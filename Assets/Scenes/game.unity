@@ -21911,7 +21911,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   terrainSize: 100
-  warningOffset: 5
+  warningOffset: 2
 --- !u!1 &1517051269
 GameObject:
   m_ObjectHideFlags: 0

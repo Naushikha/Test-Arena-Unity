@@ -34,18 +34,17 @@ public class menuScript : MonoBehaviour
     IEnumerator runAnim()
     {
         player.sprite = animList[currentAnim];
+        Color tmpCol = player.color;
+        tmpCol.a = 100;
+        player.color = tmpCol;
         currentAnim++;
         // If it's a new animation, take a break
         if (breakFrame[currentBreak] == currentAnim)
         {
-            Color tmpCol = player.color;
             tmpCol.a = 0;
             player.color = tmpCol;
             currentBreak++;
             yield return new WaitForSeconds(breakTime);
-            tmpCol.a = 100;
-            player.sprite = null;
-            player.color = tmpCol;
             // Last frame is gonna be a break frame anyway
             if (currentAnim == animList.Length)
             {
@@ -80,10 +79,10 @@ public class menuScript : MonoBehaviour
 
     public void exitGame()
     {
-        #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-        #else
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
             Application.Quit();
-        #endif
+#endif
     }
 }
