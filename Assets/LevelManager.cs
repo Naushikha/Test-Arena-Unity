@@ -59,7 +59,7 @@ public class LevelManager : MonoBehaviour
         if (playerHealth <= 0)
         {
             Cursor.lockState = CursorLockMode.None;
-            GameManager.Instance.currentLevel = currentLevel;
+            GameManager.Instance.currentLevel = currentLevel - 1;
             GameManager.Instance.score = Mathf.FloorToInt(GameManager.Instance.aliensKilled * 10 * GameManager.Instance.difficulty * (1 + (currentLevel / 6)));
             SceneManager.LoadScene("score");
         }

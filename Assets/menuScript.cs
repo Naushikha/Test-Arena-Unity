@@ -88,4 +88,15 @@ public class menuScript : MonoBehaviour
     {
         panel.SetActive(false);
     }
+
+    public GameObject objComment;
+    public void setComment(string comment)
+    {
+        objComment.SetActive(true);
+        objComment.GetComponent<Text>().text = comment;
+    }
+    public void hideComment()
+    {
+        objComment.SetActive(false);
+    }
 }
