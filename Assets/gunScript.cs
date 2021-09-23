@@ -133,7 +133,7 @@ public class gunScript : MonoBehaviour
 
     void displayHUDAmmo()
     {
-        GameManager.Instance.txtAmmo.text = "AMMO | " + currentMags + " / " + currentAmmo;
+        LevelManager.Instance.txtAmmo.text = "AMMO | " + currentMags + " / " + currentAmmo;
     }
 
     void crosshairVisible(float alpha)

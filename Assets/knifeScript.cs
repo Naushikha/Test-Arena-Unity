@@ -86,7 +86,7 @@ public class knifeScript : MonoBehaviour
 
     void displayHUDAmmo()
     {
-        GameManager.Instance.txtAmmo.text = "AMMO | ∞";
+        LevelManager.Instance.txtAmmo.text = "AMMO | ∞";
     }
     void crosshairVisible(float alpha)
     {

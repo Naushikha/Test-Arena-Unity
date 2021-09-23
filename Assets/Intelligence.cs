@@ -116,7 +116,7 @@ public class attackState : IState
         if (owner.playerInDamageRange && (0.3 <= animTime && animTime <= 0.45))
         {
             // Reduce player health
-            GameManager.Instance.playerHurt(2f);
+            LevelManager.Instance.playerHurt(2f);
         }
     }
     public void Exit()
@@ -202,7 +202,7 @@ public class deadState : IState
         {
             if (owner.animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
             {
-                GameManager.Instance.alienKilled();
+                LevelManager.Instance.alienKilled();
                 killCountSet = true;
             }
         }
@@ -256,7 +256,7 @@ public class Intelligence : MonoBehaviour
         // Give warning hints to player
         if (playerInWarningRange && !(stateMachine.GetCurrentState() is deadState))
         {
-            GameManager.Instance.showWarning();
+            LevelManager.Instance.showWarning();
         }
         stateMachine.Update();
     }

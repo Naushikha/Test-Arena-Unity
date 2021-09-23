@@ -20,11 +20,11 @@ public class theresNoEscape : MonoBehaviour
     {
         if (transform.position.x < valMin || transform.position.x > valMax || transform.position.z < valMin || transform.position.z > valMax)
         {
-            GameManager.Instance.noEscape.SetActive(true);
+            LevelManager.Instance.noEscape.SetActive(true);
         }
         else
         {
-            GameManager.Instance.noEscape.SetActive(false);
+            LevelManager.Instance.noEscape.SetActive(false);
         }
     }
 }

@@ -4,9 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class LevelManager : MonoBehaviour
 {
-    public static GameManager Instance { get; private set; }
+    public static LevelManager Instance { get; private set; }
     public float playerHealth = 100f;
     public int currentWave = 0;
     public GameObject alienPrefab;
