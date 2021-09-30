@@ -76,15 +76,15 @@ public class gunScript : MonoBehaviour
 
             if (target != null)
             {
-                ParticleSystem bloodGO = Instantiate(alienBloodEffect, hit.point, Quaternion.LookRotation(hit.normal));
+                GameObject bloodGO = Instantiate(alienBloodEffect.gameObject, hit.point, Quaternion.LookRotation(hit.normal));
                 Destroy(bloodGO, 2f);
                 target.takeDamage(damage);
                 // Set damage according to how severe it is
             }
             if (hit.transform.gameObject.layer == LayerMask.NameToLayer("ground")) // Check if ground
             {
-                ParticleSystem impactGO = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
-                Destroy(impactGO, 2f);
+                GameObject impactGO = Instantiate(impactEffect.gameObject, hit.point, Quaternion.LookRotation(hit.normal));
+                Destroy(impactGO, 1f);
             }
         }
 
