@@ -493,7 +493,7 @@ MonoBehaviour:
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: This is gonna be fun.
+            m_StringArgument: THIS IS GONNA BE FUN.
             m_BoolArgument: 0
           m_CallState: 1
   - eventID: 1
@@ -1452,7 +1452,7 @@ MonoBehaviour:
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: Grandmas and babies choose this.
+            m_StringArgument: GRANDMAS AND BABIES CHOOSE THIS.
             m_BoolArgument: 0
           m_CallState: 1
   - eventID: 1
@@ -1600,7 +1600,7 @@ MonoBehaviour:
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: If you are one, you'll survive... maybe.
+            m_StringArgument: IF YOU ARE ONE, YOU'LL SURVIVE... MAYBE.
             m_BoolArgument: 0
           m_CallState: 1
   - eventID: 1
@@ -1651,10 +1651,10 @@ RectTransform:
   m_Father: {fileID: 1425426867}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -57.799}
-  m_SizeDelta: {x: 400, y: 150}
+  m_AnchorMin: {x: 0.336732, y: 0.73600006}
+  m_AnchorMax: {x: 0.66236603, y: 1}
+  m_AnchoredPosition: {x: 1, y: 8.201019}
+  m_SizeDelta: {x: 0, y: 18}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &953074104
 MonoBehaviour:
@@ -2923,7 +2923,7 @@ MonoBehaviour:
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: The average joe.
+            m_StringArgument: THE AVERAGE JOE.
             m_BoolArgument: 0
           m_CallState: 1
   - eventID: 1
@@ -3150,7 +3150,7 @@ MonoBehaviour:
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: Go ahead you'll learn something new.
+            m_StringArgument: GO AHEAD YOU'LL LEARN SOMETHING NEW.
             m_BoolArgument: 0
           m_CallState: 1
   - eventID: 1
