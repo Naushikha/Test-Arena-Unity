@@ -1,8 +1,8 @@
 using UnityEngine;
 public class idleState : IState
 {
-    Intelligence owner;
-    public idleState(Intelligence owner) { this.owner = owner; }
+    warperAI owner;
+    public idleState(warperAI owner) { this.owner = owner; }
     public void Enter()
     {
         owner.animator.Play("base.idle", 0, 0);
@@ -16,8 +16,8 @@ public class idleState : IState
 }
 public class chaseState : IState
 {
-    Intelligence owner;
-    public chaseState(Intelligence owner) { this.owner = owner; }
+    warperAI owner;
+    public chaseState(warperAI owner) { this.owner = owner; }
     public void Enter()
     {
         owner.SFX_seen.Play();
@@ -35,8 +35,8 @@ public class chaseState : IState
 }
 public class ragedState : IState
 {
-    Intelligence owner;
-    public ragedState(Intelligence owner) { this.owner = owner; }
+    warperAI owner;
+    public ragedState(warperAI owner) { this.owner = owner; }
     public void Enter()
     {
         owner.SFX_seen.Play();
@@ -55,8 +55,8 @@ public class ragedState : IState
 }
 public class attackState : IState
 {
-    Intelligence owner;
-    public attackState(Intelligence owner) { this.owner = owner; }
+    warperAI owner;
+    public attackState(warperAI owner) { this.owner = owner; }
 
     private Vector3 playerPos;
     private Vector3 enemyPos;
@@ -110,8 +110,8 @@ public class attackState : IState
 }
 public class jumpState : IState
 {
-    Intelligence owner;
-    public jumpState(Intelligence owner) { this.owner = owner; }
+    warperAI owner;
+    public jumpState(warperAI owner) { this.owner = owner; }
     public void Enter()
     {
         owner.animator.Play("base.jump", 0, 0);
@@ -128,8 +128,8 @@ public class jumpState : IState
 }
 public class hurtState : IState
 {
-    Intelligence owner;
-    public hurtState(Intelligence owner) { this.owner = owner; }
+    warperAI owner;
+    public hurtState(warperAI owner) { this.owner = owner; }
     private bool wasEnraged;
     public void Enter()
     {
@@ -162,8 +162,8 @@ public class hurtState : IState
 }
 public class deadState : IState
 {
-    Intelligence owner;
-    public deadState(Intelligence owner) { this.owner = owner; }
+    warperAI owner;
+    public deadState(warperAI owner) { this.owner = owner; }
 
     private bool killCountSet = false;
     public void Enter()
@@ -185,7 +185,7 @@ public class deadState : IState
     public void Exit() { }
 }
 
-public class Intelligence : MonoBehaviour
+public class warperAI : MonoBehaviour
 {
     public float sightRange = 10f, attackRange = 5f, damageRange = 2f, attackJumpDistance = 4f;
     public float warningRange = 15f;

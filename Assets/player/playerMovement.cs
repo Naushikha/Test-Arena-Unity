@@ -14,6 +14,8 @@ public class playerMovement : MonoBehaviour
     public Transform groundCheck;
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
+    public Terrain ground;
+    public GameObject player;
 
     // SFX for jumping
     public AudioSource[] SFX_jump;
@@ -37,6 +39,15 @@ public class playerMovement : MonoBehaviour
         if (isGrounded && velocity.y < 0)
         {
             velocity.y = -2f;
+        }
+        // Make sure he doesn't fall through the ground
+        float terrainY = ground.SampleHeight(player.transform.position);
+        if (player.transform.position.y < terrainY)
+        {
+            controller.enabled = false; // https://forum.unity.com/threads/does-transform-position-work-on-a-charactercontroller.36149/
+            player.transform.position = new Vector3(player.transform.position.x, terrainY + 8f, player.transform.position.z);
+            controller.enabled = true;
+
         }
 
         float x = Input.GetAxis("Horizontal");

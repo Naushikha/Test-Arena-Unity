@@ -72,7 +72,7 @@ public class gunScript : MonoBehaviour
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range, ~playerMask))
         {
             // Debug.Log(hit.transform.name);
-            Intelligence target = hit.transform.root.gameObject.GetComponent<Intelligence>();
+            warperAI target = hit.transform.root.gameObject.GetComponent<warperAI>();
 
             if (target != null)
             {

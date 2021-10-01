@@ -50,7 +50,7 @@ public class knifeScript : MonoBehaviour
         {
             // Debug.Log(hit.transform.name);
 
-            Intelligence target = hit.transform.root.gameObject.GetComponent<Intelligence>();
+            warperAI target = hit.transform.root.gameObject.GetComponent<warperAI>();
 
             if (target != null)
             {

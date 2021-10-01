@@ -761,7 +761,7 @@ TerrainCollider:
   m_Material: {fileID: 0}
   m_Enabled: 1
   m_TerrainData: {fileID: 15600000, guid: 0b64486f8e4168851beba433f501df90, type: 2}
-  m_EnableTreeColliders: 1
+  m_EnableTreeColliders: 0
 --- !u!218 &488384771
 Terrain:
   m_ObjectHideFlags: 0
@@ -6012,6 +6012,14 @@ PrefabInstance:
       propertyPath: crosshair
       value: 
       objectReference: {fileID: 1176433673}
+    - target: {fileID: 1486036799752645206, guid: 45c2a199cfb36e2a1bc275b39a50f80c, type: 3}
+      propertyPath: ground
+      value: 
+      objectReference: {fileID: 488384771}
+    - target: {fileID: 1486036799752645206, guid: 45c2a199cfb36e2a1bc275b39a50f80c, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1516050438}
     - target: {fileID: 1486036799752645208, guid: 45c2a199cfb36e2a1bc275b39a50f80c, type: 3}
       propertyPath: m_RootOrder
       value: 4
