@@ -44,7 +44,6 @@ public class playerMovement : MonoBehaviour
         float cumSpeed = speed; // Cumulative speed lol
         if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
         {
-            Debug.Log("running active");
             cumSpeed = speed * runMultiplier;
             isRunning = true;
         }
