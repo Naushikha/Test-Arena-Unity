@@ -1,18 +1,18 @@
 using UnityEngine;
 
-namespace WarperAI
+namespace Warper
 {
     public class idleState : IState
     {
         WarperAI owner;
         public idleState(WarperAI owner) { this.owner = owner; }
-        public void Enter() { owner.animator.SetTrigger("idle"); }
+        public void Enter() { owner.animator.Play("idle"); }
         public void Update()
         {
             if (owner.playerInSightRange && !owner.playerInAttackRange) owner.stateMachine.ChangeState(new chaseState(owner));
             if (owner.playerInAttackRange && owner.playerInSightRange) owner.stateMachine.ChangeState(new attackState(owner));
         }
-        public void Exit() { owner.animator.ResetTrigger("idle"); }
+        public void Exit() { }
     }
     public class chaseState : IState
     {
@@ -21,7 +21,7 @@ namespace WarperAI
         public void Enter()
         {
             owner.GetComponent<WarperSFX>().seen();
-            owner.animator.SetTrigger("run");
+            owner.animator.Play("run");
         }
         public void Update()
         {
@@ -30,7 +30,7 @@ namespace WarperAI
             owner.transform.LookAt(new Vector3(owner.player.position.x, owner.transform.position.y, owner.player.position.z));
             owner.transform.position += owner.transform.forward * owner.moveSpeed * Time.deltaTime;
         }
-        public void Exit() { owner.animator.ResetTrigger("run"); }
+        public void Exit() { }
     }
     public class ragedState : IState
     {
@@ -39,17 +39,16 @@ namespace WarperAI
         public void Enter()
         {
             owner.GetComponent<WarperSFX>().seen();
-            owner.animator.SetTrigger("run_fast");
+            owner.animator.Play("run_fast");
         }
         public void Update()
         {
-            // if (!owner.playerInSightRange && !owner.playerInAttackRange) owner.stateMachine.ChangeState(new idleState(owner));
             if (owner.playerInAttackRange && owner.playerInSightRange) owner.stateMachine.ChangeState(new attackState(owner));
             owner.transform.LookAt(new Vector3(owner.player.position.x, owner.transform.position.y, owner.player.position.z));
             // Move faster if in rage!
             owner.transform.position += owner.transform.forward * owner.moveSpeed * owner.rageMultiplier * Time.deltaTime;
         }
-        public void Exit() { owner.animator.ResetTrigger("run_fast"); }
+        public void Exit() { }
     }
     public class attackState : IState
     {
@@ -73,7 +72,7 @@ namespace WarperAI
             targetPos.y = owner.ground.SampleHeight(targetPos);
             unitDirection = (targetPos - enemyPos).normalized;
             t = 0;
-            owner.animator.SetTrigger("attack");
+            owner.animator.Play("attack");
             owner.GetComponent<WarperSFX>().attack();
             timeToTarget = owner.animator.GetCurrentAnimatorStateInfo(0).length * 0.6f; // 0.6 // This is because the animation at this point, stops moving
             owner.transform.LookAt(targetPos); // Look at target
@@ -104,13 +103,13 @@ namespace WarperAI
                 LevelManager.Instance.playerHurt(2f);
             }
         }
-        public void Exit() { owner.animator.ResetTrigger("attack"); }
+        public void Exit() { }
     }
     public class jumpState : IState
     {
         WarperAI owner;
         public jumpState(WarperAI owner) { this.owner = owner; }
-        public void Enter() { owner.animator.SetTrigger("jump"); }
+        public void Enter() { owner.animator.Play("jump"); }
         public void Update()
         {
             // If jump animation is done go back to idling
@@ -119,7 +118,7 @@ namespace WarperAI
                 owner.stateMachine.ChangeState(new idleState(owner));
             }
         }
-        public void Exit() { owner.animator.ResetTrigger("jump"); }
+        public void Exit() { }
     }
     public class hurtState : IState
     {
@@ -128,7 +127,7 @@ namespace WarperAI
         private bool wasEnraged;
         public void Enter()
         {
-            owner.animator.SetTrigger("flinch");
+            owner.animator.Play("flinch");
             owner.GetComponent<WarperSFX>().flinch();
             if (owner.stateMachine.GetPreviousState() is ragedState)
             {
@@ -153,7 +152,7 @@ namespace WarperAI
                 }
             }
         }
-        public void Exit() { owner.animator.ResetTrigger("flinch"); }
+        public void Exit() { }
     }
     public class deadState : IState
     {
@@ -163,7 +162,7 @@ namespace WarperAI
         private bool killCountSet = false;
         public void Enter()
         {
-            owner.animator.SetTrigger($"die{Random.Range(1, owner.animator.GetInteger("dieAnimNumber") + 1)}");
+            owner.animator.Play($"die{Random.Range(1, owner.animator.GetInteger("dieAnimNumber") + 1)}");
             owner.GetComponent<WarperSFX>().die();
         }
         public void Update()
@@ -189,6 +188,7 @@ namespace WarperAI
         public Transform player;
         public Terrain ground;
         protected internal Animator animator;
+        protected internal float animFadeIn = 0.2f;
 
         protected internal bool playerInSightRange, playerInAttackRange, playerInDamageRange;
         protected internal StateMachine stateMachine = new StateMachine();
@@ -197,8 +197,9 @@ namespace WarperAI
         {
             animator = GetComponent<Animator>();
             player = GameObject.FindGameObjectWithTag("Player").transform;
+            ground = GameObject.FindGameObjectWithTag("Ground").GetComponent<Terrain>();
             stateMachine.ChangeState(new idleState(this));
-            // Check difficulty of arena, if defined
+            // Check difficulty, if defined
             if (GameManager.Instance)
             {
                 // Get difficulty from game

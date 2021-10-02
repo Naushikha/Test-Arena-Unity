@@ -2,12 +2,13 @@ using UnityEngine;
 
 public class GoliathSFX : MonoBehaviour
 {
+    public AudioSource sfxPlaceStep, sfxStartStep;
     void placeStep()
     {
-        transform.Find("SFX/placeStep").GetComponent<AudioSource>().Play();
+        sfxPlaceStep.Play();
     }
     void startStep()
     {
-        transform.Find("SFX/startStep").GetComponent<AudioSource>().Play();
+        sfxStartStep.Play();
     }
 }

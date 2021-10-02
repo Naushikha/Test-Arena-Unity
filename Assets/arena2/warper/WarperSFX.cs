@@ -1,28 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WarperSFX : MonoBehaviour
 {
-    public int shotSFXNumber = 3;
+    public AudioSource sfxFlinch, sfxAttack, sfxSeen, sfxDie;
+    public AudioSource[] sfxHit;
     public void flinch()
     {
-        transform.Find("SFX/flinch").GetComponent<AudioSource>().Play();
+        sfxFlinch.Play();
     }
     public void attack()
     {
-        transform.Find("SFX/attack").GetComponent<AudioSource>().Play();
+        sfxAttack.Play();
     }
     public void seen()
     {
-        transform.Find("SFX/seen").GetComponent<AudioSource>().Play();
+        sfxSeen.Play();
     }
     public void die()
     {
-        transform.Find("SFX/die").GetComponent<AudioSource>().Play();
+        sfxDie.Play();
     }
     public void shot()
     {
-        transform.Find($"SFX/hit{Random.Range(1, shotSFXNumber) + 1}").GetComponent<AudioSource>().Play();
+        sfxHit[Random.Range(1, sfxHit.Length)].Play();
     }
 }

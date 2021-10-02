@@ -68,7 +68,7 @@ public class LevelManager : MonoBehaviour
     {
         StartCoroutine(blinkLeft());
         killedAliens++;
-        GameManager.Instance.aliensKilled++; // Increase aliens for score
+        if (GameManager.Instance) GameManager.Instance.aliensKilled++; // Increase aliens for score
         txtAliens.text = "(:|:) LEFT | " + (prevAliens.Count - killedAliens);
         if (killedAliens == prevAliens.Count)
         {
@@ -101,15 +101,19 @@ public class LevelManager : MonoBehaviour
         killedAliens = 0;
         prevAliens.Clear();
         int aliensToGen = (int)Mathf.Pow(2, currentLevel);
-        while (aliensToGen > 0)
+        if (alienPrefab)
         {
-            int randX = Random.Range(25, 95);
-            int randZ = Random.Range(5, 95);
-            GameObject newAlien = Instantiate(alienPrefab, new Vector3(randX, 0, randZ), Quaternion.identity) as GameObject;
-            int randRotY = Random.Range(0, 360);
-            newAlien.transform.Rotate(0, randRotY, 0);
-            prevAliens.Add(newAlien);
-            aliensToGen--;
+            while (aliensToGen > 0)
+            {
+                int randX = Random.Range(25, 95);
+                int randZ = Random.Range(5, 95);
+                GameObject newAlien = Instantiate(alienPrefab, new Vector3(randX, 0, randZ), Quaternion.identity) as GameObject;
+                int randRotY = Random.Range(0, 360);
+                newAlien.transform.Rotate(0, randRotY, 0);
+                prevAliens.Add(newAlien);
+                aliensToGen--;
+            }
+
         }
         txtAliens.text = "(:|:) LEFT | " + prevAliens.Count;
         Vector3 tmpPosition = new Vector3(16.2099991f, 7.15999985f, 5.38999987f);
