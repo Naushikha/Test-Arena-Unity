@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class goliathSFX : MonoBehaviour
+public class GoliathSFX : MonoBehaviour
 {
     void placeStep()
     {
