@@ -618,9 +618,11 @@ MonoBehaviour:
   idleTime: 5
   patrolTime: 10
   fireChargeTime: 1.7
-  fireRate: 15
+  fireRate: 10
   fireTime: 5
+  fireReachSpeed: 5
   health: 100
+  impactEffect: {fileID: 1275716044202580533, guid: 493e348daee0a45cba4640ee0e158564, type: 3}
   fireRight: {fileID: 467169923}
   fireLeft: {fileID: 676871803}
 --- !u!195 &140802251
@@ -2284,11 +2286,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3810408324774500699, guid: 24991617ceb2d8e21a2cd8aacc00d912, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.00452
+      value: 0.0043
       objectReference: {fileID: 0}
     - target: {fileID: 3810408324774500699, guid: 24991617ceb2d8e21a2cd8aacc00d912, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.00357
+      value: -0.0035
       objectReference: {fileID: 0}
     - target: {fileID: 3810408324774500699, guid: 24991617ceb2d8e21a2cd8aacc00d912, type: 3}
       propertyPath: m_LocalPosition.z

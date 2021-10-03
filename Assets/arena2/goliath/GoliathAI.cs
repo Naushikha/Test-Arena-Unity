@@ -9,8 +9,9 @@ namespace Goliath
     {
         public float sightRange = 20f, fireRange = 15f, meleeRange = 2f;
         public float idleTime = 5.0f, patrolTime = 10.0f;
-        public float fireChargeTime = 1.0f, fireRate = 15f, fireTime = 5.0f;
+        public float fireChargeTime = 1.0f, fireRate = 15f, fireTime = 5.0f, fireReachSpeed = 5.0f;
         public float health = 100f;
+        public ParticleSystem impactEffect;
         public ParticleSystem fireRight;
         public ParticleSystem fireLeft;
         protected internal Transform player;
@@ -137,7 +138,20 @@ namespace Goliath
         GoliathAI owner;
         public fireState(GoliathAI owner) { this.owner = owner; }
         private float nextTimeToFire = 0f, timer = 0f;
-        public void Enter() { owner.animator.Play("fire"); }
+        private Vector3 fireStartMarker, fireEndMarker;
+        private float fireDistance, startTime;
+        public void Enter()
+        {
+            owner.animator.Play("fire");
+            Vector3 unitDirection = owner.transform.forward;
+            Vector3 goliathPos = owner.transform.position;
+            Vector3 playerPos = owner.player.transform.position;
+            float trueDistance = Vector3.Distance(goliathPos, playerPos);
+            fireDistance = trueDistance * 0.7f; // Start firing away from Goliath
+            fireStartMarker = goliathPos + unitDirection * 0.3f * trueDistance;
+            fireEndMarker = playerPos;
+            startTime = Time.time;
+        }
         public void Update()
         {
             timer += Time.deltaTime;
@@ -147,10 +161,36 @@ namespace Goliath
                 nextTimeToFire = Time.time + 1f / owner.fireRate;
                 owner.sfx.fire();
                 owner.playFireAnimation();
+                // Actual firing
+                float distCovered = (Time.time - startTime) * owner.fireReachSpeed;
+                Vector3 firePos = Vector3.Lerp(fireStartMarker, fireEndMarker, distCovered / fireDistance);
+                if (distCovered >= fireDistance)
+                {
+                    Debug.Log("Player getting hit!");
+                }
+                else
+                {
+                    Vector3 fireRight = firePos + owner.transform.right * 2.0f;
+                    Vector3 fireLeft = firePos + -owner.transform.right * 2.0f;
+                    fireRight.y = owner.ground.SampleHeight(fireRight);
+                    fireLeft.y = owner.ground.SampleHeight(fireLeft);
+                    GameObject impactGO = GameObject.Instantiate(owner.impactEffect.gameObject, fireRight, Quaternion.Euler(-90, 0, 0));
+                    GameObject.Destroy(impactGO, 1f);
+                    impactGO = GameObject.Instantiate(owner.impactEffect.gameObject, fireLeft, Quaternion.Euler(-90, 0, 0));
+                    GameObject.Destroy(impactGO, 1f);
+                    updateFirePath(firePos);
+                }
             }
             owner.transform.LookAt(new Vector3(owner.player.position.x, owner.transform.position.y, owner.player.position.z));
         }
         public void Exit() { }
+        void updateFirePath(Vector3 currentFirePos)
+        {
+            Vector3 playerPos = owner.player.transform.position;
+            fireDistance = Vector3.Distance(currentFirePos, playerPos);
+            fireEndMarker = playerPos;
+            // startTime = Time.time;
+        }
     }
 
     public class fireDischargeState : IState
