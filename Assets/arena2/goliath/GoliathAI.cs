@@ -167,6 +167,8 @@ namespace Goliath
                 if (distCovered >= fireDistance)
                 {
                     Debug.Log("Player getting hit!");
+                    // Reduce player health
+                    LevelManager.Instance.playerHurt(2f);
                 }
                 else
                 {

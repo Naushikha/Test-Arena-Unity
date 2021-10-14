@@ -16,6 +16,7 @@ public class playerMovement : MonoBehaviour
     public LayerMask groundMask;
     public Terrain ground;
     public GameObject player;
+    public WeaponSway weaponSway;
 
     // SFX for jumping
     public AudioSource[] SFX_jump;
@@ -80,6 +81,7 @@ public class playerMovement : MonoBehaviour
 
         controller.Move(velocity * Time.deltaTime);
         handleSFX();
+        handleBobbing();
     }
 
     IEnumerator waitForJumpSFXDone()
@@ -104,6 +106,19 @@ public class playerMovement : MonoBehaviour
                 SFX_step[Random.Range(0, SFX_step.Length)].Play();
             }
         }
+    }
+    void handleBobbing()
+    {
+        if (isGrounded)
+        {
+            if (move != Vector3.zero)
+            {
+                if (isRunning) weaponSway.currentBobState = WeaponSway.bobState.Run;
+                else weaponSway.currentBobState = WeaponSway.bobState.Walk;
+            }
+            else weaponSway.currentBobState = WeaponSway.bobState.Stand;
+        }
+        else weaponSway.currentBobState = WeaponSway.bobState.Stand;
     }
     void runSFX()
     {
