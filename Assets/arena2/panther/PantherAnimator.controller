@@ -7,7 +7,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: die
+  m_Name: die3
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -33,7 +33,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: whip
+  m_Name: attack
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -427,7 +427,7 @@ AnimatorStateMachine:
     m_Position: {x: 980, y: 340, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7329523057740823075}
-    m_Position: {x: 780, y: 380, z: 0}
+    m_Position: {x: 430, y: 330, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5737986524574782113}
     m_Position: {x: 780, y: 410, z: 0}

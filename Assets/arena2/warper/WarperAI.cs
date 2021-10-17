@@ -2,6 +2,94 @@ using UnityEngine;
 
 namespace Warper
 {
+    public class WarperAI : MonoBehaviour
+    {
+        public float sightRange = 10f, attackRange = 5f, damageRange = 2f, attackJumpDistance = 4f;
+        public float moveSpeed = 2f;
+        public float health = 100f;
+        public float rageMultiplier = 2f;
+        public Transform player;
+        public Terrain ground;
+        public ParticleSystem bloodEffect;
+        protected internal Animator animator;
+        protected internal float animFadeIn = 0.2f;
+
+        protected internal bool playerInSightRange, playerInAttackRange, playerInDamageRange;
+        protected internal StateMachine stateMachine = new StateMachine();
+
+        private void Start()
+        {
+            animator = GetComponent<Animator>();
+            player = GameObject.FindGameObjectWithTag("Player").transform;
+            ground = GameObject.FindGameObjectWithTag("Ground").GetComponent<Terrain>();
+            stateMachine.ChangeState(new idleState(this));
+            // Check difficulty, if defined
+            if (GameManager.Instance)
+            {
+                // Get difficulty from game
+                float difficulty = GameManager.Instance.difficulty;
+                sightRange *= difficulty;
+                attackRange *= difficulty;
+                damageRange *= difficulty;
+                attackJumpDistance *= difficulty;
+                moveSpeed *= difficulty;
+                health *= difficulty;
+                rageMultiplier *= difficulty;
+            }
+        }
+
+        private void Update()
+        {
+            float tmpPlayerDist = Vector3.Distance(transform.position, player.position);
+            playerInSightRange = tmpPlayerDist <= sightRange;
+            playerInAttackRange = tmpPlayerDist <= attackRange;
+            playerInDamageRange = tmpPlayerDist <= damageRange;
+            stateMachine.Update();
+        }
+
+        public void takeDamage(hitData dData)
+        {
+            GameObject bloodGO = Instantiate(bloodEffect.gameObject, dData.hit.point, Quaternion.LookRotation(dData.hit.normal));
+            Destroy(bloodGO, 2f);
+            GetComponent<WarperSFX>().shot();
+            // Do not take damage if dead
+            if (stateMachine.GetCurrentState() is deadState) return;
+            if (health <= 0) { Die(); return; }
+            else
+            {
+                health -= dData.damage;
+                // If the player was not to be seen and this dude was just chillin', get enraged
+                if (!playerInSightRange && (stateMachine.GetCurrentState() is idleState))
+                {
+                    // Go to raged state
+                    stateMachine.ChangeState(new ragedState(this));
+                    return;
+                }
+                // Brutal difficulty! - if already hurt make him rage!
+                if (stateMachine.GetCurrentState() is hurtState && Random.value >= 0.5)
+                {
+                    stateMachine.ChangeState(new ragedState(this));
+                }
+                if (Random.value >= 0.7 && !(stateMachine.GetCurrentState() is ragedState)) // And if raged do not go into hurt state?
+                {
+                    stateMachine.ChangeState(new hurtState(this));
+                }
+            }
+        }
+        private void Die()
+        {
+            stateMachine.ChangeState(new deadState(this));
+        }
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, attackRange);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, sightRange);
+        }
+
+    }
+
     public class idleState : IState
     {
         WarperAI owner;
@@ -177,90 +265,5 @@ namespace Warper
             }
         }
         public void Exit() { }
-    }
-
-    public class WarperAI : MonoBehaviour
-    {
-        public float sightRange = 10f, attackRange = 5f, damageRange = 2f, attackJumpDistance = 4f;
-        public float moveSpeed = 2f;
-        public float health = 100f;
-        public float rageMultiplier = 2f;
-        public Transform player;
-        public Terrain ground;
-        protected internal Animator animator;
-        protected internal float animFadeIn = 0.2f;
-
-        protected internal bool playerInSightRange, playerInAttackRange, playerInDamageRange;
-        protected internal StateMachine stateMachine = new StateMachine();
-
-        private void Start()
-        {
-            animator = GetComponent<Animator>();
-            player = GameObject.FindGameObjectWithTag("Player").transform;
-            ground = GameObject.FindGameObjectWithTag("Ground").GetComponent<Terrain>();
-            stateMachine.ChangeState(new idleState(this));
-            // Check difficulty, if defined
-            if (GameManager.Instance)
-            {
-                // Get difficulty from game
-                float difficulty = GameManager.Instance.difficulty;
-                sightRange *= difficulty;
-                attackRange *= difficulty;
-                damageRange *= difficulty;
-                attackJumpDistance *= difficulty;
-                moveSpeed *= difficulty;
-                health *= difficulty;
-                rageMultiplier *= difficulty;
-            }
-        }
-
-        private void Update()
-        {
-            float tmpPlayerDist = Vector3.Distance(transform.position, player.position);
-            playerInSightRange = tmpPlayerDist <= sightRange;
-            playerInAttackRange = tmpPlayerDist <= attackRange;
-            playerInDamageRange = tmpPlayerDist <= damageRange;
-            stateMachine.Update();
-        }
-
-        public void takeDamage(float amount)
-        {
-            GetComponent<WarperSFX>().shot();
-            // Do not take damage if dead
-            if (stateMachine.GetCurrentState() is deadState) return;
-            if (health <= 0) { Die(); return; }
-            else
-            {
-                health -= amount;
-                // If the player was not to be seen and this dude was just chillin', get enraged
-                if (!playerInSightRange && (stateMachine.GetCurrentState() is idleState))
-                {
-                    // Go to raged state
-                    stateMachine.ChangeState(new ragedState(this));
-                    return;
-                }
-                // Brutal difficulty! - if already hurt make him rage!
-                if (stateMachine.GetCurrentState() is hurtState && Random.value >= 0.5)
-                {
-                    stateMachine.ChangeState(new ragedState(this));
-                }
-                if (Random.value >= 0.7 && !(stateMachine.GetCurrentState() is ragedState)) // And if raged do not go into hurt state?
-                {
-                    stateMachine.ChangeState(new hurtState(this));
-                }
-            }
-        }
-        private void Die()
-        {
-            stateMachine.ChangeState(new deadState(this));
-        }
-        private void OnDrawGizmosSelected()
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, attackRange);
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(transform.position, sightRange);
-        }
-
     }
 }

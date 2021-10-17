@@ -13,6 +13,7 @@ namespace Panther
         protected internal Transform player;
         protected internal Terrain ground;
         protected internal Animator animator;
+        public ParticleSystem bloodEffect;
         protected internal NavMeshAgent agent;
         protected internal PantherSFX sfx;
         protected internal string waypointsName = "waypoints";
@@ -40,8 +41,27 @@ namespace Panther
             stateMachine.Update();
         }
         public Vector3 getRandomWaypoint() { return waypoints[Random.Range(0, waypoints.Count)].position; }
-        public void takeDamage(float amount) { }
-        // private void Die() { stateMachine.ChangeState(new deadState(this)); }
+        public void takeDamage(hitData dData)
+        {
+            GameObject bloodGO = Instantiate(bloodEffect.gameObject, dData.hit.point, Quaternion.LookRotation(dData.hit.normal));
+            Destroy(bloodGO, 2f);
+            sfx.shot();
+            // Do not take damage if dead
+            if (stateMachine.GetCurrentState() is deadState) return;
+            if (health <= 0) { Die(); return; }
+            else
+            {
+                health -= dData.damage;
+                // If the player was not to be seen and this dude was just chillin', start chasing
+                if (!playerInSightRange && (stateMachine.GetCurrentState() is idleState))
+                {
+                    // Go to chase state
+                    stateMachine.ChangeState(new chaseState(this));
+                    return;
+                }
+            }
+        }
+        private void Die() { stateMachine.ChangeState(new deadState(this)); }
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.red;
@@ -62,8 +82,8 @@ namespace Panther
             timer += Time.deltaTime;
             if (timer > owner.idleTime) owner.stateMachine.ChangeState(new patrolState(owner));
             if (owner.playerInSightRange) owner.stateMachine.ChangeState(new chaseState(owner));
+            if (owner.playerInMeleeRange) owner.stateMachine.ChangeState(new attackState(owner));
             // if (owner.playerInSightRange && !owner.playerInFireRange) owner.stateMachine.ChangeState(new chaseState(owner));
-            // if (owner.playerInFireRange && owner.playerInSightRange) owner.stateMachine.ChangeState(new attackState(owner));
         }
         public void Exit() { }
     }
@@ -97,7 +117,7 @@ namespace Panther
         public void Enter()
         {
             prevSpeed = owner.agent.speed;
-            owner.agent.speed = prevSpeed * 5;
+            owner.agent.speed = prevSpeed * 8;
             owner.animator.CrossFade("run", owner.animFadeIn);
             owner.sfx.seen();
         }
@@ -105,8 +125,54 @@ namespace Panther
         {
             owner.agent.SetDestination(owner.player.position);
             if (!owner.playerInSightRange) owner.stateMachine.ChangeState(new idleState(owner));
-            // if (owner.playerInFireRange) owner.stateMachine.ChangeState(new fireChargeState(owner));
+            if (owner.playerInMeleeRange) owner.stateMachine.ChangeState(new attackState(owner));
         }
         public void Exit() { owner.agent.speed = prevSpeed; owner.agent.SetDestination(owner.agent.transform.position); }
+    }
+
+    public class attackState : IState
+    {
+        PantherAI owner;
+        public attackState(PantherAI owner) { this.owner = owner; }
+        public void Enter() { owner.animator.Play("attack"); }
+        public void Update()
+        {
+            owner.transform.LookAt(owner.player.position); // Look at player
+            float animTime = owner.animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+            if (animTime > 1)
+            {
+                owner.stateMachine.ChangeState(new idleState(owner));
+            }
+            if (owner.playerInMeleeRange && (0.3 <= animTime && animTime <= 0.6))
+            {
+                // Reduce player health
+                LevelManager.Instance.playerHurt(2f);
+            }
+        }
+        public void Exit() { }
+    }
+
+    public class deadState : IState
+    {
+        PantherAI owner;
+        public deadState(PantherAI owner) { this.owner = owner; }
+        private bool killCountSet = false;
+        public void Enter()
+        {
+            owner.animator.Play($"die{Random.Range(1, 3 + 1)}");
+            owner.sfx.die();
+        }
+        public void Update()
+        {
+            if (!killCountSet)
+            {
+                if (owner.animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
+                {
+                    LevelManager.Instance.alienKilled();
+                    killCountSet = true;
+                }
+            }
+        }
+        public void Exit() { }
     }
 }

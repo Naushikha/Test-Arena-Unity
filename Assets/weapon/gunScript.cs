@@ -81,15 +81,10 @@ public class gunScript : MonoBehaviour
                 target.takeDamage(damage);
                 // Set damage according to how severe it is
             }
-            // Arena2 warper
-            Warper.WarperAI target2 = hit.transform.root.gameObject.GetComponent<Warper.WarperAI>();
-            if (target2 != null)
-            {
-                GameObject bloodGO = Instantiate(alienBloodEffect.gameObject, hit.point, Quaternion.LookRotation(hit.normal));
-                Destroy(bloodGO, 2f);
-                target2.takeDamage(damage);
-            }
-            if (hit.transform.gameObject.layer == LayerMask.NameToLayer("ground")) // Check if ground
+            // Handle damage to targets
+            Target target2 = hit.transform.root.gameObject.GetComponent<Target>();
+            if (target2 != null) { target2.getHit(damage, hit); }
+            else
             {
                 GameObject impactGO = Instantiate(impactEffect.gameObject, hit.point, Quaternion.LookRotation(hit.normal));
                 Destroy(impactGO, 1f);
