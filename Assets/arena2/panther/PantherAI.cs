@@ -19,7 +19,7 @@ namespace Panther
         protected internal string waypointsName = "waypoints";
         protected internal List<Transform> waypoints = new List<Transform>();
         protected internal float animFadeIn = 0.5f;
-        protected internal bool playerInSightRange, playerInMeleeRange;
+        protected internal bool playerInSightRange, playerInMeleeRange, playerInDamageRange;
         protected internal StateMachine stateMachine = new StateMachine();
         private void Start()
         {
@@ -38,6 +38,7 @@ namespace Panther
             float distToPlayer = Vector3.Distance(transform.position, player.position);
             playerInSightRange = distToPlayer <= sightRange;
             playerInMeleeRange = distToPlayer <= meleeRange;
+            playerInDamageRange = distToPlayer <= meleeRange + 1; // This is to give the damage a bit of a range when he swings limbs
             stateMachine.Update();
         }
         public Vector3 getRandomWaypoint() { return waypoints[Random.Range(0, waypoints.Count)].position; }
@@ -54,7 +55,7 @@ namespace Panther
             {
                 health -= dData.damage;
                 // If the player was not to be seen and this dude was just chillin', start chasing
-                if (!playerInSightRange && (stateMachine.GetCurrentState() is idleState))
+                if (!playerInSightRange && (stateMachine.GetCurrentState() is idleState || stateMachine.GetCurrentState() is patrolState))
                 {
                     // Go to chase state
                     stateMachine.ChangeState(new chaseState(this));
@@ -125,7 +126,6 @@ namespace Panther
         public void Update()
         {
             owner.agent.SetDestination(owner.player.position);
-            if (!owner.playerInSightRange) owner.stateMachine.ChangeState(new idleState(owner));
             if (owner.playerInMeleeRange) owner.stateMachine.ChangeState(new attackState(owner));
         }
         public void Exit() { owner.agent.speed = prevSpeed; owner.agent.SetDestination(owner.agent.transform.position); }
@@ -144,7 +144,7 @@ namespace Panther
             {
                 owner.stateMachine.ChangeState(new idleState(owner));
             }
-            if (owner.playerInMeleeRange && (0.3 <= animTime && animTime <= 0.6))
+            if (owner.playerInDamageRange && (0.3 <= animTime && animTime <= 0.6))
             {
                 // Reduce player health
                 LevelManager.Instance.playerHurt(2f);
