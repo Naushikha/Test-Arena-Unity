@@ -7,7 +7,6 @@ public class gunScript : MonoBehaviour
     public Camera fpsCam;
     public ParticleSystem muzzleFlash;
     public ParticleSystem impactEffect;
-    public ParticleSystem alienBloodEffect;
     public LayerMask playerMask;
     public float damage = 10f;
     public float range = 100f;
@@ -72,18 +71,9 @@ public class gunScript : MonoBehaviour
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range, ~playerMask))
         {
             // Debug.Log(hit.transform.name);
-            warperAI target = hit.transform.root.gameObject.GetComponent<warperAI>();
-
-            if (target != null)
-            {
-                GameObject bloodGO = Instantiate(alienBloodEffect.gameObject, hit.point, Quaternion.LookRotation(hit.normal));
-                Destroy(bloodGO, 2f);
-                target.takeDamage(damage);
-                // Set damage according to how severe it is
-            }
             // Handle damage to targets
-            Target target2 = hit.transform.root.gameObject.GetComponent<Target>();
-            if (target2 != null) { target2.getHit(damage, hit); }
+            Target target = hit.transform.root.gameObject.GetComponent<Target>();
+            if (target != null) { target.getHit(damage, hit); }
             else
             {
                 GameObject impactGO = Instantiate(impactEffect.gameObject, hit.point, Quaternion.LookRotation(hit.normal));

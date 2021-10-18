@@ -12,6 +12,7 @@ namespace Warper
         public Terrain ground;
         public ParticleSystem bloodEffect;
         protected internal Animator animator;
+        protected internal WarperSFX sfx;
         protected internal float animFadeIn = 0.2f;
 
         protected internal bool playerInSightRange, playerInAttackRange, playerInDamageRange;
@@ -19,6 +20,7 @@ namespace Warper
 
         private void Start()
         {
+            sfx = GetComponent<WarperSFX>();
             animator = GetComponent<Animator>();
             player = GameObject.FindGameObjectWithTag("Player").transform;
             ground = GameObject.FindGameObjectWithTag("Ground").GetComponent<Terrain>();
@@ -51,7 +53,8 @@ namespace Warper
         {
             GameObject bloodGO = Instantiate(bloodEffect.gameObject, dData.hit.point, Quaternion.LookRotation(dData.hit.normal));
             Destroy(bloodGO, 2f);
-            GetComponent<WarperSFX>().shot();
+            if (dData.type == hitType.knife) sfx.stabbed();
+            else sfx.shot();
             // Do not take damage if dead
             if (stateMachine.GetCurrentState() is deadState) return;
             if (health <= 0) { Die(); return; }
@@ -108,7 +111,7 @@ namespace Warper
         public chaseState(WarperAI owner) { this.owner = owner; }
         public void Enter()
         {
-            owner.GetComponent<WarperSFX>().seen();
+            owner.sfx.seen();
             owner.animator.Play("run");
         }
         public void Update()
@@ -126,7 +129,7 @@ namespace Warper
         public ragedState(WarperAI owner) { this.owner = owner; }
         public void Enter()
         {
-            owner.GetComponent<WarperSFX>().seen();
+            owner.sfx.seen();
             owner.animator.Play("run_fast");
         }
         public void Update()
@@ -161,7 +164,7 @@ namespace Warper
             unitDirection = (targetPos - enemyPos).normalized;
             t = 0;
             owner.animator.Play("attack");
-            owner.GetComponent<WarperSFX>().attack();
+            owner.sfx.attack();
             timeToTarget = owner.animator.GetCurrentAnimatorStateInfo(0).length * 0.6f; // 0.6 // This is because the animation at this point, stops moving
             owner.transform.LookAt(targetPos); // Look at target
         }
@@ -216,7 +219,7 @@ namespace Warper
         public void Enter()
         {
             owner.animator.Play("flinch");
-            owner.GetComponent<WarperSFX>().flinch();
+            owner.sfx.flinch();
             if (owner.stateMachine.GetPreviousState() is ragedState)
             {
                 owner.rageMultiplier *= 1.3f; // Make him even angrier
@@ -251,7 +254,7 @@ namespace Warper
         public void Enter()
         {
             owner.animator.Play($"die{Random.Range(1, owner.animator.GetInteger("dieAnimNumber") + 1)}");
-            owner.GetComponent<WarperSFX>().die();
+            owner.sfx.die();
         }
         public void Update()
         {

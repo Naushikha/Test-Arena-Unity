@@ -45,7 +45,8 @@ namespace Panther
         {
             GameObject bloodGO = Instantiate(bloodEffect.gameObject, dData.hit.point, Quaternion.LookRotation(dData.hit.normal));
             Destroy(bloodGO, 2f);
-            sfx.shot();
+            if (dData.type == hitType.knife) sfx.stabbed();
+            else sfx.shot();
             // Do not take damage if dead
             if (stateMachine.GetCurrentState() is deadState) return;
             if (health <= 0) { Die(); return; }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PantherSFX : MonoBehaviour
 {
-    public AudioSource sfxIdle1, sfxIdle2, sfxSeen, sfxRun, sfxWalk, sfxWhip, sfxDie;
+    public AudioSource sfxIdle1, sfxIdle2, sfxSeen, sfxRun, sfxWalk, sfxWhip, sfxDie, sfxStabbed;
     public AudioSource[] sfxHit;
     public void idle()
     {
@@ -15,6 +15,7 @@ public class PantherSFX : MonoBehaviour
     public void attack() { sfxWhip.Play(); }
     public void die() { sfxDie.Play(); }
     public void shot() { sfxHit[Random.Range(1, sfxHit.Length)].Play(); }
+    public void stabbed() { sfxStabbed.Play(); }
 
 }
 

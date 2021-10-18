@@ -202,9 +202,9 @@ public class warperAI : MonoBehaviour
     public AudioSource SFX_attack;
     public AudioSource SFX_die;
     public AudioSource[] SFX_hit;
-
+    public AudioSource SFX_stabbed;
     public string[] deathAnim;
-
+    public ParticleSystem bloodEffect;
     protected internal Animator animator;
 
 
@@ -250,9 +250,12 @@ public class warperAI : MonoBehaviour
         stateMachine.Update();
     }
 
-    public void takeDamage(float amount)
+    public void takeDamage(hitData dData)
     {
-        SFX_hit[Random.Range(0, SFX_hit.Length)].Play();
+        GameObject bloodGO = Instantiate(bloodEffect.gameObject, dData.hit.point, Quaternion.LookRotation(dData.hit.normal));
+        Destroy(bloodGO, 2f);
+        if (dData.type == hitType.knife) SFX_stabbed.Play();
+        else SFX_hit[Random.Range(0, SFX_hit.Length)].Play();
         // Do not take damage if dead
         if (stateMachine.GetCurrentState() is deadState)
         {
@@ -265,7 +268,7 @@ public class warperAI : MonoBehaviour
         }
         else
         {
-            health -= amount;
+            health -= dData.damage;
             // If the player was not to be seen and this dude was just chillin', get enraged
             if (!playerInSightRange && (stateMachine.GetCurrentState() is idleState))
             {
