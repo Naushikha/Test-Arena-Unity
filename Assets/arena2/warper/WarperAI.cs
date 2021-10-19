@@ -83,6 +83,13 @@ namespace Warper
         {
             stateMachine.ChangeState(new deadState(this));
         }
+        protected internal void setOnGround()
+        {
+            float terrainY;
+            terrainY = ground.SampleHeight(transform.position);
+            transform.position = new Vector3(transform.position.x, terrainY, transform.position.z);
+            // Also set the angle respective to the terrain if possible
+        }
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.red;
@@ -120,6 +127,7 @@ namespace Warper
             if (owner.playerInAttackRange) owner.stateMachine.ChangeState(new attackState(owner));
             owner.transform.LookAt(new Vector3(owner.player.position.x, owner.transform.position.y, owner.player.position.z));
             owner.transform.position += owner.transform.forward * owner.moveSpeed * Time.deltaTime;
+            owner.setOnGround();
         }
         public void Exit() { }
     }
@@ -138,6 +146,7 @@ namespace Warper
             owner.transform.LookAt(new Vector3(owner.player.position.x, owner.transform.position.y, owner.player.position.z));
             // Move faster if in rage!
             owner.transform.position += owner.transform.forward * owner.moveSpeed * owner.rageMultiplier * Time.deltaTime;
+            owner.setOnGround();
         }
         public void Exit() { }
     }
