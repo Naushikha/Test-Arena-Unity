@@ -142,7 +142,11 @@ namespace Panther
         }
         public void Update()
         {
-            owner.agent.SetDestination(owner.player.position);
+            Vector3 playerPos = owner.player.position;
+            playerPos.y = owner.ground.SampleHeight(playerPos);
+            NavMeshPath path = new NavMeshPath();
+            if (owner.agent.CalculatePath(playerPos, path)) owner.agent.SetDestination(playerPos);
+            else owner.stateMachine.ChangeState(new waitState(owner));
             if (owner.playerInMeleeRange) owner.stateMachine.ChangeState(new attackState(owner));
         }
         public void Exit() { owner.agent.speed = prevSpeed; owner.agent.SetDestination(owner.agent.transform.position); }
@@ -190,6 +194,19 @@ namespace Panther
                     killCountSet = true;
                 }
             }
+        }
+        public void Exit() { }
+    }
+    public class waitState : IState
+    {
+        PantherAI owner;
+        public waitState(PantherAI owner) { this.owner = owner; }
+        private float timer = 0;
+        public void Enter() { owner.animator.CrossFade("idle", owner.animFadeIn); }
+        public void Update()
+        {
+            timer += Time.deltaTime;
+            if (timer > owner.idleTime) owner.stateMachine.ChangeState(new patrolState(owner));
         }
         public void Exit() { }
     }

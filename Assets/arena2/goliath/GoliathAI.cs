@@ -149,7 +149,11 @@ namespace Goliath
         }
         public void Update()
         {
-            owner.agent.SetDestination(owner.player.position);
+            Vector3 playerPos = owner.player.position;
+            playerPos.y = owner.ground.SampleHeight(playerPos);
+            NavMeshPath path = new NavMeshPath();
+            if (owner.agent.CalculatePath(playerPos, path)) owner.agent.SetDestination(playerPos);
+            else owner.stateMachine.ChangeState(new fireChargeState(owner));
             if (owner.playerInFireRange) owner.stateMachine.ChangeState(new fireChargeState(owner));
         }
         public void Exit() { owner.agent.speed = prevSpeed; owner.agent.SetDestination(owner.agent.transform.position); }
