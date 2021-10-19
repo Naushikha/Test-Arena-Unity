@@ -16,7 +16,9 @@ namespace Panther
         public ParticleSystem bloodEffect;
         protected internal NavMeshAgent agent;
         protected internal PantherSFX sfx;
-        protected internal string waypointsName = "waypoints";
+        public string waypointsName = "waypoints";
+        public bool randomPatrolNavigation = true;
+        public float randomPatrolRadius = 25f;
         protected internal List<Transform> waypoints = new List<Transform>();
         protected internal float animFadeIn = 0.5f;
         protected internal bool playerInSightRange, playerInMeleeRange, playerInDamageRange;
@@ -29,8 +31,8 @@ namespace Panther
             player = GameObject.FindGameObjectWithTag("Player").transform;
             ground = GameObject.FindGameObjectWithTag("Ground").GetComponent<Terrain>();
             if (!player || !ground) Debug.LogError("Player or Ground is not set for Panther!");
-            Transform waypointsObject = GameObject.FindGameObjectWithTag(waypointsName).transform;
-            foreach (Transform t in waypointsObject) { waypoints.Add(t); }
+            // Transform waypointsObject = GameObject.FindGameObjectWithTag(waypointsName).transform;
+            // foreach (Transform t in waypointsObject) { waypoints.Add(t); }
             stateMachine.ChangeState(new idleState(this));
         }
         private void Update()
@@ -42,6 +44,19 @@ namespace Panther
             stateMachine.Update();
         }
         public Vector3 getRandomWaypoint() { return waypoints[Random.Range(0, waypoints.Count)].position; }
+        // https://answers.unity.com/questions/475066/how-to-get-a-random-point-on-navmesh.html
+        public Vector3 getRandomPatrolLocation()
+        {
+            Vector3 randomDirection = Random.insideUnitSphere * randomPatrolRadius;
+            randomDirection += transform.position;
+            NavMeshHit hit;
+            Vector3 finalPosition = Vector3.zero;
+            if (NavMesh.SamplePosition(randomDirection, out hit, randomPatrolRadius, 1))
+            {
+                finalPosition = hit.position;
+            }
+            return finalPosition;
+        }
         public void takeDamage(hitData dData)
         {
             GameObject bloodGO = Instantiate(bloodEffect.gameObject, dData.hit.point, Quaternion.LookRotation(dData.hit.normal));
@@ -96,14 +111,16 @@ namespace Panther
         private float timer = 0;
         public void Enter()
         {
-            owner.agent.SetDestination(owner.getRandomWaypoint());
+            if (owner.randomPatrolNavigation) owner.agent.SetDestination(owner.getRandomPatrolLocation());
+            else owner.agent.SetDestination(owner.getRandomWaypoint());
             owner.animator.CrossFade("walk", owner.animFadeIn);
         }
         public void Update()
         {
             if (owner.agent.remainingDistance <= owner.agent.stoppingDistance)
             {
-                owner.agent.SetDestination(owner.getRandomWaypoint());
+                if (owner.randomPatrolNavigation) owner.agent.SetDestination(owner.getRandomPatrolLocation());
+                else owner.agent.SetDestination(owner.getRandomWaypoint());
             }
             timer += Time.deltaTime;
             if (timer > owner.patrolTime) owner.stateMachine.ChangeState(new idleState(owner));
