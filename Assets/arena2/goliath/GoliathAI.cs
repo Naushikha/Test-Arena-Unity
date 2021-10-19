@@ -50,8 +50,27 @@ namespace Goliath
             fireRight.Play();
             fireLeft.Play();
         }
-        public void takeDamage(float amount) { }
-        // private void Die() { stateMachine.ChangeState(new deadState(this)); }
+        public void takeDamage(hitData dData)
+        {
+            GameObject hitGO = Instantiate(impactEffect.gameObject, dData.hit.point, Quaternion.LookRotation(dData.hit.normal));
+            Destroy(hitGO, 2f);
+            sfx.shot();
+            // Do not take damage if dead
+            if (stateMachine.GetCurrentState() is deadState) return;
+            if (health <= 0) { Die(); return; }
+            else
+            {
+                health -= dData.damage;
+                // If the player was not to be seen and this dude was just chillin', start chasing
+                if (!playerInSightRange && (stateMachine.GetCurrentState() is idleState || stateMachine.GetCurrentState() is patrolState))
+                {
+                    // Go to chase state
+                    stateMachine.ChangeState(new chaseState(this));
+                    return;
+                }
+            }
+        }
+        private void Die() { stateMachine.ChangeState(new deadState(this)); }
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.red;
@@ -207,6 +226,30 @@ namespace Goliath
             if (timer > owner.fireChargeTime) owner.stateMachine.ChangeState(new fireChargeState(owner));
             owner.transform.LookAt(new Vector3(owner.player.position.x, owner.transform.position.y, owner.player.position.z));
             if (!owner.playerInSightRange) owner.stateMachine.ChangeState(new idleState(owner));
+        }
+        public void Exit() { }
+    }
+
+    public class deadState : IState
+    {
+        GoliathAI owner;
+        public deadState(GoliathAI owner) { this.owner = owner; }
+        private bool killCountSet = false;
+        public void Enter()
+        {
+            owner.animator.Play("die");
+            owner.sfx.die();
+        }
+        public void Update()
+        {
+            if (!killCountSet)
+            {
+                if (owner.animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
+                {
+                    LevelManager.Instance.alienKilled();
+                    killCountSet = true;
+                }
+            }
         }
         public void Exit() { }
     }
