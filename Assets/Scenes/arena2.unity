@@ -1413,7 +1413,7 @@ MonoBehaviour:
   fireRate: 10
   fireTime: 5
   fireReachSpeed: 5
-  health: 10
+  health: 1000
   impactEffect: {fileID: 1275716044202580533, guid: 493e348daee0a45cba4640ee0e158564, type: 3}
   fireRight: {fileID: 467169923}
   fireLeft: {fileID: 676871803}
@@ -2829,6 +2829,11 @@ Transform:
   m_Father: {fileID: 960697304}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &581551823 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -1320245443394904215, guid: d91384c01b2435ad9b00948326effeea, type: 3}
+  m_PrefabInstance: {fileID: 107110677}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &603080084
 GameObject:
   m_ObjectHideFlags: 0
@@ -4218,7 +4223,7 @@ Transform:
   - {fileID: 1452184415}
   - {fileID: 1863830997}
   - {fileID: 2082316106}
-  m_Father: {fileID: 1541680193}
+  m_Father: {fileID: 581551823}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1106379019
@@ -5515,11 +5520,6 @@ MonoBehaviour:
   patrolTime: 10
   health: 300
   bloodEffect: {fileID: 5184049520557520061, guid: 86ea1a0a96272303b9ad3de4daeec17d, type: 3}
---- !u!4 &1541680193 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d91384c01b2435ad9b00948326effeea, type: 3}
-  m_PrefabInstance: {fileID: 107110677}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1541680194
 MonoBehaviour:
   m_ObjectHideFlags: 0

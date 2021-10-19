@@ -133,7 +133,6 @@ namespace Goliath
         public void Update()
         {
             owner.agent.SetDestination(owner.player.position);
-            if (!owner.playerInSightRange) owner.stateMachine.ChangeState(new idleState(owner));
             if (owner.playerInFireRange) owner.stateMachine.ChangeState(new fireChargeState(owner));
         }
         public void Exit() { owner.agent.speed = prevSpeed; owner.agent.SetDestination(owner.agent.transform.position); }
@@ -161,14 +160,25 @@ namespace Goliath
         private float fireDistance, startTime;
         public void Enter()
         {
+            // First look at player
+            owner.transform.LookAt(new Vector3(owner.player.position.x, owner.transform.position.y, owner.player.position.z));
             owner.animator.Play("fire");
             Vector3 unitDirection = owner.transform.forward;
             Vector3 goliathPos = owner.transform.position;
             Vector3 playerPos = owner.player.transform.position;
-            float trueDistance = Vector3.Distance(goliathPos, playerPos);
-            fireDistance = trueDistance * 0.7f; // Start firing away from Goliath
-            fireStartMarker = goliathPos + unitDirection * 0.3f * trueDistance;
-            fireEndMarker = playerPos;
+            // float trueDistance = Vector3.Distance(goliathPos, playerPos);
+            Vector3 fireStartPos = goliathPos + unitDirection * 0.3f; // Start firing away from Goliath
+            // If player is within range set the fire to player position, else set it to edge of range
+            Vector3 fireEndPos;
+            if (Vector3.Distance(goliathPos, playerPos) > owner.fireRange)
+            {
+                fireEndPos = goliathPos + unitDirection * owner.fireRange; // End fire at range
+            }
+            else fireEndPos = playerPos;
+            fireDistance = Vector3.Distance(fireStartPos, fireEndPos);
+            // Set the markers
+            fireStartMarker = fireStartPos;
+            fireEndMarker = fireEndPos;
             startTime = Time.time;
         }
         public void Update()
@@ -183,9 +193,8 @@ namespace Goliath
                 // Actual firing
                 float distCovered = (Time.time - startTime) * owner.fireReachSpeed;
                 Vector3 firePos = Vector3.Lerp(fireStartMarker, fireEndMarker, distCovered / fireDistance);
-                if (distCovered >= fireDistance)
+                if (Vector3.Distance(firePos, owner.player.position) <= 5)
                 {
-                    Debug.Log("Player getting hit!");
                     // Reduce player health
                     LevelManager.Instance.playerHurt(2f);
                 }
@@ -207,9 +216,18 @@ namespace Goliath
         public void Exit() { }
         void updateFirePath(Vector3 currentFirePos)
         {
-            Vector3 playerPos = owner.player.transform.position;
-            fireDistance = Vector3.Distance(currentFirePos, playerPos);
-            fireEndMarker = playerPos;
+            Vector3 unitDirection = owner.transform.forward;
+            Vector3 goliathPos = owner.transform.position;
+            Vector3 playerPos = owner.player.position;
+            // If player is within range set the fire to player position, else set it to edge of range
+            Vector3 fireEndPos;
+            if (Vector3.Distance(goliathPos, playerPos) > owner.fireRange)
+            {
+                fireEndPos = goliathPos + unitDirection * owner.fireRange; // End fire at range
+            }
+            else fireEndPos = playerPos;
+            fireDistance = Vector3.Distance(currentFirePos, fireEndPos);
+            fireEndMarker = fireEndPos;
             // startTime = Time.time;
         }
     }
