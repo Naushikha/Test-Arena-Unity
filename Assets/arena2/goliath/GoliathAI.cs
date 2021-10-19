@@ -65,6 +65,21 @@ namespace Goliath
             fireRight.Play();
             fireLeft.Play();
         }
+        public bool testLineOfSight(Vector3 goliathFirePos, Vector3 startPos)
+        {
+            // We know that the muzzleFlash particle systems are in proper place with regards to Goliath's model
+            // Let's exploit that to figure out whether the line of sight of the weapon is ok
+            // Vector3 goliathRightGun = fireRight.transform.position;
+            // Vector3 goliathLeftGun = fireRight.transform.position;
+            // Vector3 playerPos = player.position;
+            // playerPos.y += 0.2f;
+            RaycastHit hit;
+            if (Physics.Raycast(goliathFirePos, (startPos - goliathFirePos).normalized, out hit, Vector3.Distance(startPos, goliathFirePos)))
+            {
+                if (hit.transform.tag == "Player") return true;
+            }
+            return false;
+        }
         public void takeDamage(hitData dData)
         {
             GameObject hitGO = Instantiate(impactEffect.gameObject, dData.hit.point, Quaternion.LookRotation(dData.hit.normal));
@@ -214,21 +229,34 @@ namespace Goliath
                 // Actual firing
                 float distCovered = (Time.time - startTime) * owner.fireReachSpeed;
                 Vector3 firePos = Vector3.Lerp(fireStartMarker, fireEndMarker, distCovered / fireDistance);
-                if (Vector3.Distance(firePos, owner.player.position) <= 10)
+                Vector3 goliathRightGun = owner.fireRight.transform.position;
+                Vector3 goliathLeftGun = owner.fireLeft.transform.position;
+                Vector3 playerPos = owner.player.position;
+                playerPos.y += 0.2f;
+                bool rightGunTest = owner.testLineOfSight(goliathRightGun, playerPos);
+                bool leftGunTest = owner.testLineOfSight(goliathLeftGun, playerPos);
+                if (Vector3.Distance(firePos, owner.player.position) <= 10 && (rightGunTest || leftGunTest))
                 {
                     // Reduce player health
                     LevelManager.Instance.playerHurt(2f);
                 }
                 else
                 {
-                    Vector3 fireRight = firePos + owner.transform.right * 2.0f;
-                    Vector3 fireLeft = firePos + -owner.transform.right * 2.0f;
+                    Vector3 fireRight = firePos + -owner.transform.right * 2.0f;
+                    Vector3 fireLeft = firePos + owner.transform.right * 2.0f;
                     fireRight.y = owner.ground.SampleHeight(fireRight);
                     fireLeft.y = owner.ground.SampleHeight(fireLeft);
-                    GameObject impactGO = GameObject.Instantiate(owner.impactEffect.gameObject, fireRight, Quaternion.Euler(-90, 0, 0));
-                    GameObject.Destroy(impactGO, 1f);
-                    impactGO = GameObject.Instantiate(owner.impactEffect.gameObject, fireLeft, Quaternion.Euler(-90, 0, 0));
-                    GameObject.Destroy(impactGO, 1f);
+                    GameObject impactGO;
+                    if (rightGunTest)
+                    {
+                        impactGO = GameObject.Instantiate(owner.impactEffect.gameObject, fireRight, Quaternion.Euler(-90, 0, 0));
+                        GameObject.Destroy(impactGO, 1f);
+                    }
+                    if (leftGunTest)
+                    {
+                        impactGO = GameObject.Instantiate(owner.impactEffect.gameObject, fireLeft, Quaternion.Euler(-90, 0, 0));
+                        GameObject.Destroy(impactGO, 1f);
+                    }
                     updateFirePath(firePos);
                 }
             }
