@@ -312,7 +312,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerHealth: 100
   currentLevel: 0
-  alienPrefab: {fileID: 919132149369027683}
+  alienPrefabs:
+  - {fileID: 919132149369027683}
   weapons: {fileID: 1589609687}
   player: {fileID: 1516050438}
   txtHealth: {fileID: 1377672680}

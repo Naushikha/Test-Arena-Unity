@@ -33,6 +33,17 @@ namespace Panther
             if (!player || !ground) Debug.LogError("Player or Ground is not set for Panther!");
             // Transform waypointsObject = GameObject.FindGameObjectWithTag(waypointsName).transform;
             // foreach (Transform t in waypointsObject) { waypoints.Add(t); }
+            // Snap monster back to NavMesh if he's not set properly
+            // https://stackoverflow.com/questions/46495820/unity3d-how-to-connect-navmesh-and-navmeshagent
+            while (!agent.isOnNavMesh)
+            {
+                agent.transform.position = getRandomPatrolLocation();
+                agent.enabled = false;
+                agent.enabled = true;
+            }
+            // Randomize activity times so that the audio doesnt sound odd
+            idleTime *= Random.Range(0.7f, 1.3f);
+            patrolTime *= Random.Range(0.7f, 1.3f);
             stateMachine.ChangeState(new idleState(this));
         }
         private void Update()

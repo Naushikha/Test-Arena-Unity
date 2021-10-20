@@ -7,9 +7,10 @@ using UnityEngine.SceneManagement;
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance { get; private set; }
+    public bool legacyArena = true;
     public float playerHealth = 100f;
     public int currentLevel = 0;
-    public GameObject alienPrefab;
+    public GameObject[] alienPrefabs;
     public Transform weapons;
     public GameObject player;
     public Text txtHealth;
@@ -49,7 +50,8 @@ public class LevelManager : MonoBehaviour
     void Start()
     {
         txtHealth.text = "HEALTH | " + playerHealth;
-        startNextLevel();
+        if (legacyArena) startNextLevel();
+        else startNextLevel_Arena2();
     }
     public void playerHurt(float amount)
     {
@@ -81,7 +83,8 @@ public class LevelManager : MonoBehaviour
                     target.resetAmmo();
                 }
             }
-            startNextLevel();
+            if (legacyArena) startNextLevel();
+            else startNextLevel_Arena2();
         }
     }
     void startNextLevel()
@@ -101,13 +104,51 @@ public class LevelManager : MonoBehaviour
         killedAliens = 0;
         prevAliens.Clear();
         int aliensToGen = (int)Mathf.Pow(2, currentLevel);
-        if (alienPrefab)
+        if (alienPrefabs[0])
         {
             while (aliensToGen > 0)
             {
                 int randX = Random.Range(25, 95);
                 int randZ = Random.Range(5, 95);
-                GameObject newAlien = Instantiate(alienPrefab, new Vector3(randX, 0, randZ), Quaternion.identity) as GameObject;
+                GameObject newAlien = Instantiate(alienPrefabs[0], new Vector3(randX, 0, randZ), Quaternion.identity) as GameObject;
+                int randRotY = Random.Range(0, 360);
+                newAlien.transform.Rotate(0, randRotY, 0);
+                prevAliens.Add(newAlien);
+                aliensToGen--;
+            }
+
+        }
+        txtAliens.text = "(:|:) LEFT | " + prevAliens.Count;
+        Vector3 tmpPosition = new Vector3(16.2099991f, 7.15999985f, 5.38999987f);
+        player.transform.position = tmpPosition;
+        player.transform.eulerAngles = Vector3.zero;
+        StartCoroutine(hideLevel());
+        playNextMusic();
+    }
+    void startNextLevel_Arena2()
+    {
+        currentLevel++;
+        txtLevel.text = "LEVEL " + currentLevel;
+        txtLevel.gameObject.SetActive(true);
+        sfxLevel.Play();
+        // Destroy all previous aliens
+        if (prevAliens != null)
+        {
+            foreach (GameObject alien in prevAliens)
+            {
+                Destroy(alien);
+            }
+        }
+        killedAliens = 0;
+        prevAliens.Clear();
+        int aliensToGen = (int)Mathf.Pow(2, currentLevel);
+        if (alienPrefabs[0])
+        {
+            while (aliensToGen > 0)
+            {
+                int randX = Random.Range(25, 95);
+                int randZ = Random.Range(5, 95);
+                GameObject newAlien = Instantiate(alienPrefabs[Random.Range(0, alienPrefabs.Length)], new Vector3(randX, 2, randZ), Quaternion.identity) as GameObject;
                 int randRotY = Random.Range(0, 360);
                 newAlien.transform.Rotate(0, randRotY, 0);
                 prevAliens.Add(newAlien);
