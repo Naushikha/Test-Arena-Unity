@@ -8,6 +8,7 @@ public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance { get; private set; }
     public bool legacyArena = true;
+    public int arenaSize = 100;
     public float playerHealth = 100f;
     public int currentLevel = 0;
     public GameObject[] alienPrefabs;
@@ -146,8 +147,8 @@ public class LevelManager : MonoBehaviour
         {
             while (aliensToGen > 0)
             {
-                int randX = Random.Range(25, 95);
-                int randZ = Random.Range(5, 95);
+                int randX = Random.Range(25, arenaSize - 5);
+                int randZ = Random.Range(5, arenaSize - 5);
                 GameObject newAlien = Instantiate(alienPrefabs[Random.Range(0, alienPrefabs.Length)], new Vector3(randX, 2, randZ), Quaternion.identity) as GameObject;
                 int randRotY = Random.Range(0, 360);
                 newAlien.transform.Rotate(0, randRotY, 0);

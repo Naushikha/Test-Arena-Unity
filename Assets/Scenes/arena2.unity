@@ -59760,6 +59760,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   legacyArena: 0
+  arenaSize: 170
   playerHealth: 100
   currentLevel: 0
   alienPrefabs:
@@ -105759,7 +105760,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7744528767998474921, guid: 57bd77a339ae19e13a1e313b5657217c, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 57bd77a339ae19e13a1e313b5657217c, type: 3}
