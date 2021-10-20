@@ -66,12 +66,9 @@ public class menuScript : MonoBehaviour
         title.sprite = defTitle;
         StartCoroutine(glitchTitle());
     }
-    public void playGameScene(float difficulty)
-    {
-        GameManager.Instance.setDifficulty(difficulty);
-        SceneManager.LoadScene("game");
-    }
-
+    public void setDifficulty(float difficulty) { GameManager.Instance.setDifficulty(difficulty); }
+    public void playClassic() { SceneManager.LoadScene("game"); }
+    public void playBleedingEdge() { SceneManager.LoadScene("arena2"); }
     public void exitGame()
     {
 #if UNITY_EDITOR

@@ -149,7 +149,7 @@ public class LevelManager : MonoBehaviour
             {
                 int randX = Random.Range(25, arenaSize - 5);
                 int randZ = Random.Range(5, arenaSize - 5);
-                GameObject newAlien = Instantiate(alienPrefabs[Random.Range(0, alienPrefabs.Length)], new Vector3(randX, 2, randZ), Quaternion.identity) as GameObject;
+                GameObject newAlien = Instantiate(alienPrefabs[Random.Range(0, alienPrefabs.Length)], new Vector3(randX, 0, randZ), Quaternion.identity) as GameObject;
                 int randRotY = Random.Range(0, 360);
                 newAlien.transform.Rotate(0, randRotY, 0);
                 prevAliens.Add(newAlien);
