@@ -47,6 +47,18 @@ namespace Goliath
             // Randomize activity times so that the audio doesnt sound odd
             idleTime *= Random.Range(0.7f, 1.3f);
             patrolTime *= Random.Range(0.7f, 1.3f);
+            // Check difficulty of arena, if defined
+            if (GameManager.Instance)
+            {
+                // Get difficulty from game
+                float difficulty = GameManager.Instance.difficulty;
+                sightRange *= difficulty;
+                fireRange *= difficulty;
+                fireReachSpeed *= difficulty;
+                fireTime *= difficulty;
+                health *= difficulty;
+                randomPatrolRadius *= difficulty;
+            }
             stateMachine.ChangeState(new idleState(this));
         }
         private void Update()

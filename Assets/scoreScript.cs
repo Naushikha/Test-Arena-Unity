@@ -45,6 +45,7 @@ public class scoreScript : MonoBehaviour
     public void playAgain()
     {
         // Pick what arena
-        SceneManager.LoadScene("game");
+        if (GameManager.Instance.legacyArena) SceneManager.LoadScene("game");
+        else SceneManager.LoadScene("arena2");
     }
 }

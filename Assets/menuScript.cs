@@ -67,8 +67,8 @@ public class menuScript : MonoBehaviour
         StartCoroutine(glitchTitle());
     }
     public void setDifficulty(float difficulty) { GameManager.Instance.setDifficulty(difficulty); }
-    public void playClassic() { SceneManager.LoadScene("game"); }
-    public void playBleedingEdge() { SceneManager.LoadScene("arena2"); }
+    public void playClassic() { SceneManager.LoadScene("game"); GameManager.Instance.legacyArena = true; }
+    public void playBleedingEdge() { SceneManager.LoadScene("arena2"); GameManager.Instance.legacyArena = false; }
     public void exitGame()
     {
 #if UNITY_EDITOR

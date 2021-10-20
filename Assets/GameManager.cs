@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
         }
     }
     public float difficulty = 1.0f;
+    public bool legacyArena = false;
 
     public void setDifficulty(float difficulty)
     {
