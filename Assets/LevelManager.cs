@@ -4,6 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
+using Panther;
+using Goliath;
+using Warper;
+
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance { get; private set; }
@@ -52,7 +56,7 @@ public class LevelManager : MonoBehaviour
     {
         txtHealth.text = "HEALTH | " + playerHealth;
         if (legacyArena) startNextLevel();
-        else startNextLevel_Arena2();
+        else { startNextLevel_Arena2(); StartCoroutine(pollRandomTriggers()); }
     }
     public void playerHurt(float amount)
     {
@@ -238,6 +242,26 @@ public class LevelManager : MonoBehaviour
             txtAliens.color = blinkColor2;
             yield return new WaitForSeconds(0.2f);
             txtAliens.color = blinkColor1;
+        }
+    }
+
+    IEnumerator pollRandomTriggers()
+    {
+        yield return new WaitForSeconds(30);
+        makeRandomMonsterChasePlayer();
+        StartCoroutine(pollRandomTriggers());
+    }
+
+    void makeRandomMonsterChasePlayer()
+    {
+        for (int i = 0; i < prevAliens.Count; i++)
+        {
+            PantherAI panther = prevAliens[i].GetComponent<PantherAI>();
+            if (panther && !panther.isDead()) { panther.sendAfterPlayer(); break; }
+            GoliathAI goliath = prevAliens[i].GetComponent<GoliathAI>();
+            if (goliath && !goliath.isDead()) { goliath.sendAfterPlayer(); break; }
+            WarperAI warper = prevAliens[i].GetComponent<WarperAI>();
+            if (warper && !warper.isDead()) { warper.sendAfterPlayer(); break; }
         }
     }
 }

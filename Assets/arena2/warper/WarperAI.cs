@@ -79,10 +79,9 @@ namespace Warper
                 }
             }
         }
-        private void Die()
-        {
-            stateMachine.ChangeState(new deadState(this));
-        }
+        private void Die() { stateMachine.ChangeState(new deadState(this)); }
+        public bool isDead() { if (stateMachine.GetCurrentState() is deadState) return true; else return false; }
+        public void sendAfterPlayer() { stateMachine.ChangeState(new chaseState(this)); }
         protected internal void setOnGround()
         {
             float terrainY;

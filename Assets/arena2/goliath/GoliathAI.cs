@@ -124,6 +124,9 @@ namespace Goliath
             }
         }
         private void Die() { stateMachine.ChangeState(new deadState(this)); }
+        public bool isDead() { if (stateMachine.GetCurrentState() is deadState) return true; else return false; }
+        public void sendAfterPlayer() { stateMachine.ChangeState(new chaseState(this)); }
+        
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.red;
